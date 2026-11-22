@@ -29,7 +29,7 @@ SITE = "https://aihuman.ai.kr"
 HOST = "aihuman.ai.kr"
 BRAND = "AiHuman"
 BRAND_KO = "AI휴먼"
-VER = "20261122c"
+VER = "20261122e"
 TODAY = "2026-11-22"
 # AiHuman 배포(AIMarker 서버 프로젝트 버전 39, 엔진은 AIMarker 와 같음 · 2026.11.22 12:48)
 API = "https://script.google.com/macros/s/AKfycby_nRD2dpVLYztnfUlaiQfS3zOXZwfBMVewmZgecSqnONA3vVmiiIyQuZ32Ae5hcOntyg/exec"
@@ -93,13 +93,26 @@ def guide_by(slug):
     return next(g for g in P.GUIDES if g["slug"] == slug)
 
 
+# 검색어 주소(11.22 대표 '웹페이지 뒤에 주소도 AIHUMANIZER 등으로'): 가이드 글을 /guide/ 아래가 아니라 맨 위 검색어 주소로 둠.
+# 예전 /guide/<slug>/ 는 넘김 쪽(noindex · canonical 새 주소)으로 남김(build_redirects)
+GSLUG = {"humanizer-compare": "ai-humanizer-compare", "natural-rewrite": "ai-natural-rewrite", "free-humanizing": "ai-humanizing-free"}
+
+
+def gpath(g):
+    return GSLUG.get(g["slug"], g["slug"]) + "/"
+
+
+def guide_at(new):
+    return next(g for g in P.GUIDES if gpath(g) == new.strip("/") + "/")
+
+
 # 바닥글 검색어 링크(검색어 = 그 글의 주제, 첫 화면 방침대로 검사기 이름 글은 넣지 않음)
-FT_KW = [("/", "AI 휴머나이징"), ("/guide/ai-rate-lower/", "AI 작성률 낮추기"), ("/", "AI 휴머나이저"), ("/guide/ai-text-humanize/", "AI 글 인간화"),
-         ("/guide/korean-humanizer/", "한국어 휴머나이저"), ("/guide/ai-sentence-converter/", "AI 문장 변환기"), ("/guide/ai-detector/", "AI 탐지기"), ("/pricing/", "AI 휴머나이징 가격")]
+FT_KW = [("/", "AI 휴머나이징"), ("/ai-humanizer/", "AI 휴머나이저"), ("/ai-rate-lower/", "AI 작성률 낮추기"), ("/ai-text-humanize/", "AI 글 인간화"),
+         ("/korean-humanizer/", "한국어 휴머나이저"), ("/ai-sentence-converter/", "AI 문장 변환기"), ("/ai-detector/", "AI 탐지기"), ("/ai-humanizing/", "AI 휴머나이징이란"), ("/pricing/", "AI 휴머나이징 가격")]
 
 
 def footer():
-    gl = [("/guide/", "가이드 전체")] + [("/guide/%s/" % s, guide_by(s)["kw"].split(" · ")[0]) for s in ["ai-rate-lower", "thesis-ai-rate", "resume-ai-rate", "humanizer-compare", "free-humanizing"]]
+    gl = [("/guide/", "가이드 전체")] + [("/" + gpath(guide_by(s)), guide_by(s)["kw"].split(" · ")[0]) for s in ["ai-rate-lower", "thesis-ai-rate", "resume-ai-rate", "humanizer-compare", "free-humanizing"]]
     cols = [
         ("서비스", [("/#tool", "무료 AI 작성률 검사"), ("/#example", "실제 측정 결과"), ("/pricing/", "요금 · 토큰 충전"), ("/faq/", "자주 묻는 질문")]),
         ("가이드", gl),
@@ -404,12 +417,12 @@ def hero(eyebrow, h1, lead, pts=None):
         ORBIT, eyebrow, ico("trend_down"), h1, lead, ico("upload"), ico("upload"), ico("pen"), "".join("<li>%s%s</li>" % (ico("check"), t) for t in pts), proof_line(), demo_card())
 
 
-def tool_section():
+def tool_section(flat=False):
     badges = [("lock", "가입 없이 무료"), ("file", "20만 자"), ("check", "한글 · 워드 · PDF"), ("shield", "글은 저장하지 않음")]
-    return ('<section class="tool-sec" aria-labelledby="toolH"><div class="wrap"><div class="tool-panel">'
+    return ('<section class="tool-sec%s" aria-labelledby="toolH"><div class="wrap"><div class="tool-panel">'
             '<div class="tool-head"><h2 id="toolH"><span class="ic">%s</span>AI 작성률 검사 · AI 휴머나이징</h2><div class="tool-badges">%s</div></div>'
             '<div id="tool" class="tool-w">%s</div></div><div class="demo-slot" id="demoSlot"></div></div></section>') % (
-        ico("sparkle"), "".join('<span>%s%s</span>' % (ico(i), t) for i, t in badges), tool_html())
+        " tool-flat" if flat else "", ico("sparkle"), "".join('<span>%s%s</span>' % (ico(i), t) for i, t in badges), tool_html())
 
 
 def example_section(h2="AI 휴머나이징 전과 후,<br>실제 엔진으로 잰 결과", alt=False):
@@ -426,7 +439,7 @@ def price_section(alt=True):
 
 def guides_section():
     G = [guide_by(s) for s in P.HOME_GUIDES]
-    cards = "".join('<a class="gcard rv" href="/guide/%s/"><small>%s · %s</small><h3>%s</h3><p>%s</p><span class="go">읽어 보기 →</span></a>' % (g["slug"], g["cat"], esc(g["kw"]), esc(g["h1"]), esc(g["desc"])) for g in G)
+    cards = "".join('<a class="gcard rv" href="/%s"><small>%s · %s</small><h3>%s</h3><p>%s</p><span class="go">읽어 보기 →</span></a>' % (gpath(g), g["cat"], esc(g["kw"]), esc(g["h1"]), esc(g["desc"])) for g in G)
     return ('<section class="sec alt" id="guides"><div class="wrap"><div class="center"><p class="kick">%s가이드</p><h2 class="h2">AI 작성률 낮추기 가이드</h2>'
             '<p class="sub">AI 탐지기가 무엇을 보고 AI 작성률을 매기는지, 논문 · 자기소개서별로 어떻게 낮추는지 정리했습니다.</p></div><div class="gcards">%s</div>'
             '<p class="center" style="margin-top:26px"><a class="btn btn-g" href="/guide/">가이드 모두 보기</a></p></div></section>') % (ico("file"), cards)
@@ -470,7 +483,7 @@ def build_faq():
     trail = [("자주 묻는 질문", "faq/")]
     groups = [("서비스와 사용", P.HOME["faq"] + P.MORE_FAQ), ("결제와 토큰", P.PRICE_FAQ)]
     allq = [x for _, L in groups for x in L]
-    gl = "".join('<a href="/guide/%s/">%s</a>' % (g["slug"], esc(g["kw"].split(" · ")[0])) for g in P.GUIDES)
+    gl = "".join('<a href="/%s">%s</a>' % (gpath(g), esc(g["kw"].split(" · ")[0])) for g in P.GUIDES)
     body = '<section class="ph"><div class="wrap">%s<h1 class="h1">자주 묻는 질문</h1><p class="lead">AI 휴머나이저, AI 작성률, AI 탐지기, 결제와 토큰에 대해 자주 받는 질문을 모았습니다.</p></div></section>' % crumbs_html(trail)
     body += '<section class="sec-s"><div class="wrap-n">%s<h2 class="faq-h">검색어로 찾는 가이드</h2><div class="links">%s</div></div></section>' % ("".join('<h2 class="faq-h">%s</h2>%s' % (h, faq_html(L)) for h, L in groups), gl)
     body += cta_band()
@@ -484,19 +497,19 @@ def build_guides():
     for g in P.GUIDES:
         if g["cat"] not in cats:
             cats.append(g["cat"])
-    cards = "".join('<a class="gcard rv" href="/guide/%s/"><small>%s · %s</small><h3>%s</h3><p>%s</p><span class="go">읽어 보기 →</span></a>' % (g["slug"], g["cat"], esc(g["kw"]), esc(g["h1"]), esc(g["desc"])) for g in P.GUIDES)
+    cards = "".join('<a class="gcard rv" href="/%s"><small>%s · %s</small><h3>%s</h3><p>%s</p><span class="go">읽어 보기 →</span></a>' % (gpath(g), g["cat"], esc(g["kw"]), esc(g["h1"]), esc(g["desc"])) for g in P.GUIDES)
     body = ('<section class="ph"><div class="wrap">%s<h1 class="h1">AI 휴머나이징 가이드</h1><p class="lead">AI 작성률 낮추기, AI 탐지기 원리, 논문 · 자기소개서 AI 작성률, AI 휴머나이징 사이트 고르는 법까지 정리했습니다.</p></div></section>'
             '<section class="sec-s"><div class="wrap"><div class="gcards">%s</div></div></section>') % (crumbs_html(trail0), cards)
     body += cta_band()
     page("guide/", "AI 휴머나이징 가이드 · AI 작성률 낮추는 법 | AiHuman(AI휴먼)", "AI 작성률 낮추기, 카피킬러 · GPT킬러 AI 작성률, 챗GPT 작성률, AI 탐지기 원리, 논문 · 자기소개서 AI 작성률, AI 휴머나이징 사이트 비교까지 정리한 가이드.",
-         body, ld=[ld_crumbs(trail0), {"@type": "CollectionPage", "name": BRAND + " AI 휴머나이징 가이드", "url": SITE + "/guide/", "hasPart": [{"@type": "Article", "headline": g["h1"], "url": SITE + "/guide/%s/" % g["slug"]} for g in P.GUIDES]}], priority="0.8")
+         body, ld=[ld_crumbs(trail0), {"@type": "CollectionPage", "name": BRAND + " AI 휴머나이징 가이드", "url": SITE + "/guide/", "hasPart": [{"@type": "Article", "headline": g["h1"], "url": SITE + "/" + gpath(g)} for g in P.GUIDES]}], priority="0.8")
     for g in P.GUIDES:
-        trail = [("가이드", "guide/"), (g["h1"], "guide/%s/" % g["slug"])]
+        trail = [("가이드", "guide/"), (g["h1"], gpath(g))]
         toc = re.findall(r'<h2 id="([^"]+)">([^<]+)</h2>', g["body"])
         toc_html = ('<nav class="toc" aria-label="목차"><b>목차</b><ol>%s</ol></nav>' % "".join('<li><a href="#%s">%s</a></li>' % (i, t) for i, t in toc)) if toc else ""
         idx = P.GUIDES.index(g)
         others = [P.GUIDES[(idx + k) % len(P.GUIDES)] for k in (1, 2, 3)]
-        rel = "".join('<a class="gcard" href="/guide/%s/"><small>%s</small><h3>%s</h3><p>%s</p></a>' % (o["slug"], o["cat"], esc(o["h1"]), esc(o["desc"])) for o in others)
+        rel = "".join('<a class="gcard" href="/%s"><small>%s</small><h3>%s</h3><p>%s</p></a>' % (gpath(o), o["cat"], esc(o["h1"]), esc(o["desc"])) for o in others)
         faq = ('<h2 id="faq">자주 묻는 질문</h2>' + faq_html(g["faq"])) if g.get("faq") else ""
         body = ('<article><section class="ph"><div class="wrap-n">%s<p class="kick">%s</p><h1 class="h1">%s</h1><p class="meta"><span>%s 편집팀</span><span>%s</span><span>읽는 데 %d분</span></p></div></section>'
                 '<section class="sec-s"><div class="wrap-n"><div class="answer">%s</div>%s<div class="prose">%s%s</div>'
@@ -505,10 +518,34 @@ def build_guides():
             crumbs_html(trail), esc(g["cat"] + " · " + g["kw"]), esc(g["h1"]), BRAND, g["date"].replace("-", "."), max(2, len(re.sub(r"<[^>]+>", "", g["body"])) // 650), g["answer"], toc_html, g["body"], faq, ico("search"), rel)
         art = {"@type": "Article", "headline": g["h1"], "description": g["desc"], "inLanguage": "ko-KR", "datePublished": g["date"], "dateModified": g["date"], "keywords": g["kw"].replace(" · ", ", "),
                "author": {"@type": "Organization", "name": BRAND + " 편집팀", "url": SITE + "/about/"}, "publisher": {"@id": SITE + "/#org"},
-               "mainEntityOfPage": SITE + "/guide/%s/" % g["slug"], "image": [SITE + "/assets/img/og.png"], "articleSection": g["cat"]}
+               "mainEntityOfPage": SITE + "/" + gpath(g), "image": [SITE + "/assets/img/og.png"], "articleSection": g["cat"]}
         ld = [art, ld_crumbs(trail)] + ([ld_faq(g["faq"])] if g.get("faq") else [])
-        page("guide/%s/" % g["slug"], g["title"], g["desc"], body, ld=ld, ptype="article", priority="0.7", lastmod=g["date"],
+        page(gpath(g), g["title"], g["desc"], body, ld=ld, ptype="article", priority="0.7", lastmod=g["date"],
              extra_head='<meta property="article:published_time" content="%sT09:00:00+09:00">' % g["date"], keywords=g["kw"].replace(" · ", ", "))
+
+
+def build_landing():
+    for L in P.LANDING:
+        trail = [(L["crumb"], L["path"])]
+        cards = "".join('<div class="card rv"><span class="ic">%s</span><h3>%s</h3><p>%s</p></div>' % (ico(i), esc(h), esc(t)) for i, h, t in L["cards"])
+        rows = "".join('<tr><td>%s</td><td>%s</td><td class="me">%s</td></tr>' % (esc(a), esc(b), esc(c)) for a, b, c in L["table"])
+        rel = "".join('<a class="gcard" href="/%s"><small>%s</small><h3>%s</h3><p>%s</p></a>' % (gpath(g), g["cat"], esc(g["h1"]), esc(g["desc"])) for g in [guide_at(x) for x in L["related"][:3]])
+        body = ('<section class="ph"><div class="wrap">%s<p class="kick">%s</p><h1 class="h1">%s</h1><p class="lead">%s</p></div></section>') % (
+            crumbs_html(trail), esc(L["kw"]), esc(L["h1"]), L["lead"])
+        body += tool_section(flat=True)
+        body += demo_json()
+        body += ('<section class="sec"><div class="wrap-n"><div class="answer">%s</div></div>'
+                 '<div class="wrap" style="margin-top:26px"><div class="grid4">%s</div></div></section>') % (L["answer"], cards)
+        body += ('<section class="sec alt"><div class="wrap-n"><h2 class="h2 center">%s</h2><div class="tbl-w"><table class="tbl"><thead><tr><th scope="col">기준</th><th scope="col">왜 중요한가</th><th scope="col" class="me">%s</th></tr></thead><tbody>%s</tbody></table></div></div></section>') % (
+            esc(L["table_h"]), BRAND, rows)
+        body += example_section(h2="실제 엔진으로 잰<br>AI 휴머나이징 전과 후")
+        body += price_section(alt=True)
+        body += '<section class="sec"><div class="wrap-n"><h2 class="h2 center">자주 묻는 질문</h2>%s</div></section>' % faq_html(L["faq"])
+        body += '<section class="sec-s alt"><div class="wrap"><h2 class="h2">함께 읽으면 좋은 글</h2><div class="gcards">%s</div></div></section>' % rel
+        body += cta_band()
+        ld = [APP, ld_faq(L["faq"]), ld_crumbs(trail), {"@type": "WebPage", "@id": SITE + "/" + L["path"] + "#page", "url": SITE + "/" + L["path"], "name": L["title"].split(" | ")[0],
+                                                       "description": L["desc"], "inLanguage": "ko-KR", "isPartOf": {"@id": SITE + "/#website"}, "about": {"@id": SITE + "/#app"}}]
+        page(L["path"], L["title"], L["desc"], body, ld=ld, tool=True, priority="0.9", keywords=L["keywords"])
 
 
 def build_static():
@@ -522,19 +559,23 @@ def build_static():
 
 
 # ---------------- 넘기는 쪽: 토큰 메일의 /humanize/?pass= 단추 · 검색어 주소를 첫 화면으로 ----------------
-MERGED = {"humanize/": "/#tool", "ai-humanizer/": "/", "humanizing/": "/", "free/": "/#tool", "results/": "/#example", "check/": "/#tool"}
+# 11.22 오후: ai-humanizer/ 는 넘김 쪽에서 검색어 페이지(build_landing)로 바꿈. humanizing/ · free/ 는 같은 뜻의 새 검색어 주소로 넘김
+MERGED = {"humanize/": "/#tool", "humanizing/": "/ai-humanizing/", "free/": "/ai-humanizing-free/", "results/": "/#example", "check/": "/#tool"}
 
 
 def build_redirects():
-    for path, to in MERGED.items():
+    moved = dict(MERGED)
+    for g in P.GUIDES:   # 예전 가이드 주소 → 새 검색어 주소
+        moved["guide/%s/" % g["slug"]] = "/" + gpath(g)
+    for path, to in moved.items():
         d = os.path.join(OUT, path)
         os.makedirs(d, exist_ok=True)
         base, hsh = to.split("#")[0], (("#" + to.split("#")[1]) if "#" in to else "")
-        doc = ('<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>%s · AI 휴머나이저</title><link rel="canonical" href="%s/">'
+        doc = ('<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>%s · AI 휴머나이저</title><link rel="canonical" href="%s%s">'
                '<meta name="robots" content="noindex,follow"><meta http-equiv="refresh" content="0; url=%s"><meta name="viewport" content="width=device-width,initial-scale=1">'
                '<script>location.replace(%s + (location.search || "") + (location.hash || %s));</script></head>'
-               '<body><p><a href="%s">%s 첫 화면으로 이동합니다</a></p></body></html>') % (
-            BRAND, SITE, to, json.dumps(base), json.dumps(hsh), to, BRAND)
+               '<body><p><a href="%s">%s %s 이동합니다</a></p></body></html>') % (
+            BRAND, SITE, base, to, json.dumps(base), json.dumps(hsh), to, BRAND, "첫 화면으로" if base == "/" else "새 주소로")
         open(os.path.join(d, "index.html"), "w", encoding="utf-8").write(doc)
 
 
@@ -549,8 +590,8 @@ def build_seo():
     open(os.path.join(OUT, "robots.txt"), "w", encoding="utf-8").write(rob)
     open(os.path.join(OUT, "llms.txt"), "w", encoding="utf-8").write(P.llms_txt(SITE, PAGES, PACKS, SAMPLES))
     open(os.path.join(OUT, "llms-full.txt"), "w", encoding="utf-8").write(P.llms_full(SITE, PACKS, SAMPLES))
-    items = "".join("<item><title>%s</title><link>%s/guide/%s/</link><guid>%s/guide/%s/</guid><pubDate>%s</pubDate><description>%s</description></item>" % (
-        esc(g["h1"]), SITE, g["slug"], SITE, g["slug"], datetime.datetime.strptime(g["date"], "%Y-%m-%d").strftime("%a, %d %b %Y 09:00:00 +0900"), esc(g["desc"])) for g in P.GUIDES)
+    items = "".join("<item><title>%s</title><link>%s/%s</link><guid>%s/%s</guid><pubDate>%s</pubDate><description>%s</description></item>" % (
+        esc(g["h1"]), SITE, gpath(g), SITE, gpath(g), datetime.datetime.strptime(g["date"], "%Y-%m-%d").strftime("%a, %d %b %Y 09:00:00 +0900"), esc(g["desc"])) for g in P.GUIDES)
     open(os.path.join(OUT, "rss.xml"), "w", encoding="utf-8").write('<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>%s 가이드</title><link>%s/guide/</link><description>AI 작성률 낮추기와 AI 휴머나이징 가이드</description><language>ko</language>%s</channel></rss>' % (BRAND, SITE, items))
     open(os.path.join(OUT, "site.webmanifest"), "w", encoding="utf-8").write(json.dumps({"name": BRAND + " AI 휴머나이저", "short_name": BRAND, "start_url": "/", "display": "standalone", "background_color": "#ffffff", "theme_color": "#00113a", "lang": "ko",
                                                                                          "icons": [{"src": "/assets/img/logo-192.png?v=" + VER, "sizes": "192x192", "type": "image/png"}, {"src": "/assets/img/logo-512.png?v=" + VER, "sizes": "512x512", "type": "image/png"}]}, ensure_ascii=False))
@@ -607,6 +648,7 @@ if __name__ == "__main__":
     build_pricing()
     build_faq()
     build_redirects()
+    build_landing()
     build_guides()
     build_static()
     build_seo()

@@ -517,3 +517,12 @@ a.card:hover{transform:translateY(-3px);box-shadow:var(--sh-l);border-color:var(
   .topbar .hide-s{display:none}
 }
 @media (max-width:360px){.logo img{height:25px}.hd-r .btn-p{padding:8px 10px;font-size:13px}}
+
+/* 검색어 주소 페이지(11.22): 밝은 머리 아래 도구는 위로 겹치지 않게 */
+.tool-sec.tool-flat{margin-top:0;padding-top:24px}
+@media (max-width:1080px){.tool-sec.tool-flat{margin-top:0;padding-top:18px}}
+/* 도구가 있는 쪽(tool.css 를 함께 읽는 쪽)의 밝은 머리: tool.css 의 어두운 머리용 .ph 글자색 · 격자를 되돌림 */
+.ph{color:var(--ink)}
+.ph::before{content:none}
+.ph .h1{color:var(--navy);font-weight:820;letter-spacing:-.035em;line-height:1.18;max-width:none}
+.ph .lead{color:var(--ink-2);max-width:34em}
