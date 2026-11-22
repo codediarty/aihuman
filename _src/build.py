@@ -29,7 +29,7 @@ SITE = "https://aihuman.ai.kr"
 HOST = "aihuman.ai.kr"
 BRAND = "AiHuman"
 BRAND_KO = "AI휴먼"
-VER = "20261122e"
+VER = "20261122f"
 TODAY = "2026-11-22"
 # AiHuman 배포(AIMarker 서버 프로젝트 버전 39, 엔진은 AIMarker 와 같음 · 2026.11.22 12:48)
 API = "https://script.google.com/macros/s/AKfycby_nRD2dpVLYztnfUlaiQfS3zOXZwfBMVewmZgecSqnONA3vVmiiIyQuZ32Ae5hcOntyg/exec"
@@ -38,9 +38,9 @@ SHOP = "https://skkc.co.kr/shop_view?idx=%s&kaiec_buy=1"
 SHOP_IDX = {"lt": "166", "pl": "167", "pr": "168", "mx": "169"}   # 2026.11.22 등록(166 라이트 · 167 플러스 · 168 프로 · 169 맥스)
 NAVER_VERIFY = "1686e779481bfe2661d8976c449366c443772467"   # 네이버 서치어드바이저 HTML 태그(대표, 2026.11.22 13:57)
 GOOGLE_VERIFY = ""
-BING_VERIFY = ""
+BING_VERIFY = "6CFE39150A28BBBB4694B507E2E689C0"   # 11.22 Bing 웹마스터 도구(형제 사이트와 같은 계정의 메타 태그)
 INDEXNOW_KEY = "7c3e9a51d2b84f06a1e5c8d94b2f6a07"
-GOOGLE_FILES = []
+GOOGLE_FILES = ["google67694027f26c117c.html"]   # 11.22 구글 서치 콘솔 URL 접두어 확인용(moistener22, 도메인 속성은 가비아 TXT). 지우지 말 것
 BIZ = {"name": "성균관컨설팅", "ceo": "이채연", "no": "272-32-01885", "ecom": "제2026-경기송탄-0622",
        "addr": "경기도 수원시 장안구 서부로 2066 성균관대학교 브릿지팩토리(연구실)", "mail": "contact@skkc.co.kr"}
 # 가격 · 토큰은 AIMarker 개인 토큰 · 형제 사이트와 같음(서버 ah1~ah4). 요금 카드는 정가 없이 간단하게(형제 사이트 방침과 같게)
@@ -111,7 +111,14 @@ FT_KW = [("/", "AI 휴머나이징"), ("/ai-humanizer/", "AI 휴머나이저"), 
          ("/korean-humanizer/", "한국어 휴머나이저"), ("/ai-sentence-converter/", "AI 문장 변환기"), ("/ai-detector/", "AI 탐지기"), ("/ai-humanizing/", "AI 휴머나이징이란"), ("/pricing/", "AI 휴머나이징 가격")]
 
 
-def footer():
+# 11.22 대표 '카피킬러 AI 작성률 낮추기 같은 검색어도 하단에 적혀 노출되게': 첫 화면 밖 쪽에는 검사기 이름 검색어 칩을 더함(첫 화면은 일반 말)
+FT_KW_HOME = [("/copykiller-ai-rate/", "표절 검사 AI 작성률 낮추기"), ("/gptkiller-ai-rate/", "GPT 탐지 낮추기"), ("/chatgpt-ai-rate/", "챗GPT 작성률 낮추기"),
+              ("/ai-rate-check/", "AI 작성률 검사"), ("/thesis-ai-rate/", "논문 AI 작성률"), ("/resume-ai-rate/", "자기소개서 AI 작성률")]
+FT_KW_SUB = [("/copykiller-ai-rate/", "카피킬러 AI 작성률 낮추기"), ("/gptkiller-ai-rate/", "GPT킬러 낮추기"), ("/chatgpt-ai-rate/", "챗GPT 작성률 낮추기"),
+             ("/ai-rate-check/", "AI 작성률 검사"), ("/thesis-ai-rate/", "논문 AI 작성률"), ("/resume-ai-rate/", "자기소개서 AI 작성률")]
+
+
+def footer(home=False):
     gl = [("/guide/", "가이드 전체")] + [("/" + gpath(guide_by(s)), guide_by(s)["kw"].split(" · ")[0]) for s in ["ai-rate-lower", "thesis-ai-rate", "resume-ai-rate", "humanizer-compare", "free-humanizing"]]
     cols = [
         ("서비스", [("/#tool", "무료 AI 작성률 검사"), ("/#example", "실제 측정 결과"), ("/pricing/", "요금 · 토큰 충전"), ("/faq/", "자주 묻는 질문")]),
@@ -119,7 +126,7 @@ def footer():
         ("회사 · 정책", [("/about/", "회사 소개"), ("/terms/", "이용약관"), ("/privacy/", "개인정보처리방침"), ("mailto:" + BIZ["mail"], "문의 " + BIZ["mail"])]),
     ]
     c = "".join('<div><h4>%s</h4><ul>%s</ul></div>' % (h, "".join('<li><a href="%s">%s</a></li>' % (u, t) for u, t in L)) for h, L in cols)
-    kw = "".join('<a href="%s"><span>%s</span></a>' % (u, t) for u, t in FT_KW)
+    kw = "".join('<a href="%s"><span>%s</span></a>' % (u, t) for u, t in FT_KW + (FT_KW_HOME if home else FT_KW_SUB))
     return ('<footer class="ft"><div class="wrap"><div class="ft-top"><div>%s<p>AI휴먼 | AI 휴머나이징 전문 서비스.<br>AI 작성률을 무료로 검사하고, 걸리는 문장만 사람 문장으로 바꿉니다.</p><div class="ft-kw">%s</div></div>%s</div>'
             '<div class="ft-biz"><b>운영</b> %s · 대표 %s · 사업자등록번호 %s · 통신판매업 신고 %s<br>%s · %s<br>'
             '다른 AI 탐지 서비스의 이름은 각 권리자의 상표이며, %s은 해당 서비스와 제휴 관계가 없습니다. AI 작성률과 판정은 %s 판정 기준으로 계산한 값입니다.<br>© 2026 %s(%s). All rights reserved.</div></div></footer>'
@@ -205,7 +212,7 @@ def page(path, title, desc, body, *, ld=None, tool=False, og=None, ptype="websit
                    '<script src="/assets/am.js?v=%s" defer></script>' % VER,
                    '<script src="/assets/textin.js?v=%s" defer></script>' % VER,
                    '<script src="/assets/humanize.js?v=%s" defer></script>' % VER] + scripts
-    doc = "".join(head) + '<body data-root="/">' + '<a class="sr" href="#main">본문 바로가기</a>' + header(path) + '<main id="main">' + body + "</main>" + footer() + "".join(scripts) + "</body></html>"
+    doc = "".join(head) + '<body data-root="/">' + '<a class="sr" href="#main">본문 바로가기</a>' + header(path) + '<main id="main">' + body + "</main>" + footer(path == "") + "".join(scripts) + "</body></html>"
     fp = os.path.join(OUT, path, "index.html") if path else os.path.join(OUT, "index.html")
     if path == "404.html":
         fp = os.path.join(OUT, "404.html")
