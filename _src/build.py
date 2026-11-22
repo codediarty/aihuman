@@ -29,7 +29,7 @@ SITE = "https://aihuman.ai.kr"
 HOST = "aihuman.ai.kr"
 BRAND = "AiHuman"
 BRAND_KO = "AI휴먼"
-VER = "20261122h"
+VER = "20261122i"
 TODAY = "2026-11-22"
 # AiHuman 배포(AIMarker 서버 프로젝트 버전 39, 엔진은 AIMarker 와 같음 · 2026.11.22 12:48)
 API = "https://script.google.com/macros/s/AKfycby_nRD2dpVLYztnfUlaiQfS3zOXZwfBMVewmZgecSqnONA3vVmiiIyQuZ32Ae5hcOntyg/exec"
@@ -164,7 +164,7 @@ def ld_howto(name, steps):
 
 def ld_offers():
     return {"@type": "Product", "@id": SITE + "/pricing/#product", "name": BRAND + " AI 휴머나이징 토큰", "brand": {"@type": "Brand", "name": BRAND},
-            "description": "AI 작성률 검사와 AI 휴머나이징에 쓰는 토큰. 월 구독 없이 한 번 충전하고, 남은 토큰은 5년 동안 사라지지 않습니다.",
+            "description": "AI 작성률 검사와 AI 휴머나이징에 쓰는 토큰. 월 구독 없이 한 번 충전하고, 남은 토큰은 기한 없이 쓸 수 있습니다.",
             "image": [SITE + "/assets/product/ah-pr-1x1.jpg", SITE + "/assets/img/og.png"], "category": "디지털콘텐츠 이용권",
             "offers": [{"@type": "Offer", "name": "%s %s토큰" % (p["name"], "{:,}".format(p["tok"])), "price": str(p["price"]), "priceCurrency": "KRW", "availability": "https://schema.org/InStock",
                         "url": (shop(p["id"]).replace("&kaiec_buy=1", "") if shop(p["id"]) else (SITE + "/pricing/")), "seller": {"@type": "Organization", "name": BIZ["name"]}} for p in PACKS]}
@@ -456,7 +456,7 @@ def example_section(h2="AI 휴머나이징 전과 후,<br>실제 엔진으로 �
 
 
 def price_section(alt=True):
-    return ('<section class="sec%s" id="price"><div class="wrap"><div class="center"><p class="kick">%s요금</p><h2 class="h2">AI 휴머나이징 가격,<br><em>쓴 만큼만</em> 냅니다</h2><p class="sub">월 구독 없이 한 번 충전하면 글자 수만큼만 빠지고, 남은 토큰은 5년 동안 사라지지 않습니다. 검사는 언제나 무료로 먼저 해 보세요.</p></div>%s'
+    return ('<section class="sec%s" id="price"><div class="wrap"><div class="center"><p class="kick">%s요금</p><h2 class="h2">AI 휴머나이징 가격,<br><em>쓴 만큼만</em> 냅니다</h2><p class="sub">월 구독 없이 한 번 충전하면 글자 수만큼만 빠지고, 남은 토큰은 기한 없이 쓸 수 있습니다. 검사는 언제나 무료로 먼저 해 보세요.</p></div>%s'
             '<p class="price-note">AI 작성률 검사 무료 · AI 휴머나이징 1,000자 4토큰 · 1토큰 100원 · 부가세 포함 · 결제는 운영사 성균관컨설팅 결제 페이지(가입 없이 카드 · 간편결제)</p>%s</div></section>') % (
         " alt" if alt else "", ico("card"), pricing_cards(), calc_block())
 
@@ -493,7 +493,7 @@ def build_home():
 
 def build_pricing():
     trail = [("요금", "pricing/")]
-    body = ('<section class="ph"><div class="wrap">%s<h1 class="h1">AI 휴머나이징 가격 · 요금 · 토큰 충전</h1><p class="lead">월 구독 없이 한 번 충전하고 쓴 만큼만 씁니다. AI 작성률 검사는 무료, 휴머나이징 1,000자 4토큰. 남은 토큰은 5년 동안 사라지지 않습니다.</p></div></section>'
+    body = ('<section class="ph"><div class="wrap">%s<h1 class="h1">AI 휴머나이징 가격 · 요금 · 토큰 충전</h1><p class="lead">월 구독 없이 한 번 충전하고 쓴 만큼만 씁니다. AI 작성률 검사는 무료, 휴머나이징 1,000자 4토큰. 남은 토큰은 기한 없이 쓸 수 있습니다.</p></div></section>'
             '<section class="sec-s"><div class="wrap">%s<p class="price-note">모든 가격은 부가세 포함입니다. 결제는 운영사 성균관컨설팅 결제 페이지에서 가입 없이 카드 · 간편결제로 합니다. 결제하면 보통 1분 안에, 적은 이메일로 16자리 토큰 코드가 갑니다.</p>%s</div></section>') % (
         crumbs_html(trail), pricing_cards(), calc_block())
     body += P.pricing_detail(ico)
