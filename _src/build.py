@@ -29,14 +29,14 @@ SITE = "https://aihuman.ai.kr"
 HOST = "aihuman.ai.kr"
 BRAND = "AiHuman"
 BRAND_KO = "AI휴먼"
-VER = "20261122b"
+VER = "20261122c"
 TODAY = "2026-11-22"
 # AiHuman 배포(AIMarker 서버 프로젝트 버전 39, 엔진은 AIMarker 와 같음 · 2026.11.22 12:48)
 API = "https://script.google.com/macros/s/AKfycby_nRD2dpVLYztnfUlaiQfS3zOXZwfBMVewmZgecSqnONA3vVmiiIyQuZ32Ae5hcOntyg/exec"
 SHOP = "https://skkc.co.kr/shop_view?idx=%s&kaiec_buy=1"
 # 성균관컨설팅(아임웹) AiHuman 전용 상품 번호. 서버는 스크립트 속성 AH_IDX 로 같은 번호를 ah1~ah4 로 봄
 SHOP_IDX = {"lt": "166", "pl": "167", "pr": "168", "mx": "169"}   # 2026.11.22 등록(166 라이트 · 167 플러스 · 168 프로 · 169 맥스)
-NAVER_VERIFY = ""
+NAVER_VERIFY = "1686e779481bfe2661d8976c449366c443772467"   # 네이버 서치어드바이저 HTML 태그(대표, 2026.11.22 13:57)
 GOOGLE_VERIFY = ""
 BING_VERIFY = ""
 INDEXNOW_KEY = "7c3e9a51d2b84f06a1e5c8d94b2f6a07"
