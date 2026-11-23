@@ -238,3 +238,11 @@ for _g in GUIDES:
         _g["body"] = _g["body"] + _m["body"]
         _g["faq"] = list(_g.get("faq", [])) + list(_m["faq"])
         _g["date"] = "2026-11-23"
+
+# 11.23 4차: 나머지 가이드 12편에도 '자주 하는 실수 세 가지'(more_kw.GUIDE_MORE2). 고친 날 11.23
+from more_kw import GUIDE_MORE2 as _GM2  # noqa: E402
+for _g in GUIDES:
+    _m = _GM2.get(_g["slug"])
+    if _m:
+        _g["body"] = _g["body"] + _m
+        _g["date"] = "2026-11-23"
