@@ -30,7 +30,7 @@ SITE = "https://aihuman.ai.kr"
 HOST = "aihuman.ai.kr"
 BRAND = "AIHuman"
 BRAND_KO = "AI휴먼"
-VER = "20261123j"
+VER = "20261123k"
 TODAY = "2026-11-23"
 # AIHuman 배포(AIMarker 서버 프로젝트 버전 39, 엔진은 AIMarker 와 같음 · 2026.11.22 12:48)
 API = "https://script.google.com/macros/s/AKfycby_nRD2dpVLYztnfUlaiQfS3zOXZwfBMVewmZgecSqnONA3vVmiiIyQuZ32Ae5hcOntyg/exec"
@@ -76,7 +76,7 @@ LOGO = '<a class="logo" href="/" aria-label="%s(%s) 홈"><img src="/assets/img/l
 LOGO_W = '<a class="logo" href="/" aria-label="%s(%s) 홈"><img src="/assets/img/logo-w.png?v=%s" width="542" height="120" alt="%s"></a>' % (BRAND, BRAND_KO, VER, BRAND)
 
 # 메뉴: 형제 사이트에서 대표가 정한 대로 'AI 휴머나이저(AI 작성률 낮추기)' 하나가 첫 칸(헷갈리지 않고 결제로). 검사기 이름은 메뉴에 쓰지 않음
-NAV = [("", "AI 휴머나이저<small>(AI 작성률 낮추기)</small>"), ("pricing/", "요금"), ("guide/", "가이드"), ("faq/", "자주 묻는 질문")]
+NAV = [("", "AI 작성률 낮추기"), ("pricing/", "요금"), ("guide/", "가이드"), ("faq/", "자주 묻는 질문")]   # 2026.11.23 21:42 대표(한국휴머나이저 · 카피휴먼과 같게): 'AI 휴머나이저(AI 작성률 낮추기)' → 'AI 작성률 낮추기'
 
 
 def header(path):
