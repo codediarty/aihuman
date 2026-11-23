@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-"""AiHuman(aihuman.ai.kr) 정적 사이트 만들기
+"""AIHuman(aihuman.ai.kr) 정적 사이트 만들기
 
     python3 _src/build.py
 
 docs/ 에 페이지 · sitemap.xml · robots.txt · llms.txt · llms-full.txt · rss.xml 을 씁니다(GitHub Pages 가 docs/ 를 그대로 서빙).
-검사 · 휴머나이징 엔진은 AIMarker 서버(Apps Script 'AIMarker 서버' 프로젝트)의 같은 엔진, AiHuman 배포(버전 39, AH서버.gs 층)를 씁니다.
+검사 · 휴머나이징 엔진은 AIMarker 서버(Apps Script 'AIMarker 서버' 프로젝트)의 같은 엔진, AIHuman 배포(버전 39, AH서버.gs 층)를 씁니다.
 대표(2026.11.22 12:26): 'aihuman.ai.kr 도메인 구매했으니 휴머나이징 웹사이트 더 잘 만들어줘. AIMarker와 엔진 동일하게 하고 아임웹 상품 구성 및
 웹사이트 휴머나이징 레이아웃도 참고로 해서 제작하되 조금 더 개선되게 해줘 디자인말이야(엔진 성능과 기능은 동일하게 해야됨). 노출도 잘되어야 하니까
-아래 키워드 참고해서 적용해줘 세팅 모두 다 해줘'. 교차검증(AIMarker ↔ AiHuman 8/8 · 한국휴머나이징 ↔ AiHuman 8/8 일치)
+아래 키워드 참고해서 적용해줘 세팅 모두 다 해줘'. 교차검증(AIMarker ↔ AIHuman 8/8 · 한국휴머나이징 ↔ AIHuman 8/8 일치)
 """
 import datetime
 import difflib
@@ -28,14 +28,14 @@ import more_kw as MK  # noqa: E402
 # ---------------- 설정 ----------------
 SITE = "https://aihuman.ai.kr"
 HOST = "aihuman.ai.kr"
-BRAND = "AiHuman"
+BRAND = "AIHuman"
 BRAND_KO = "AI휴먼"
-VER = "20261123g"
+VER = "20261123h"
 TODAY = "2026-11-23"
-# AiHuman 배포(AIMarker 서버 프로젝트 버전 39, 엔진은 AIMarker 와 같음 · 2026.11.22 12:48)
+# AIHuman 배포(AIMarker 서버 프로젝트 버전 39, 엔진은 AIMarker 와 같음 · 2026.11.22 12:48)
 API = "https://script.google.com/macros/s/AKfycby_nRD2dpVLYztnfUlaiQfS3zOXZwfBMVewmZgecSqnONA3vVmiiIyQuZ32Ae5hcOntyg/exec"
 SHOP = "https://skkc.co.kr/shop_view?idx=%s&kaiec_buy=1"
-# 성균관컨설팅(아임웹) AiHuman 전용 상품 번호. 서버는 스크립트 속성 AH_IDX 로 같은 번호를 ah1~ah4 로 봄
+# 성균관컨설팅(아임웹) AIHuman 전용 상품 번호. 서버는 스크립트 속성 AH_IDX 로 같은 번호를 ah1~ah4 로 봄
 SHOP_IDX = {"lt": "166", "pl": "167", "pr": "168", "mx": "169"}   # 2026.11.22 등록(166 라이트 · 167 플러스 · 168 프로 · 169 맥스)
 NAVER_VERIFY = "1686e779481bfe2661d8976c449366c443772467"   # 네이버 서치어드바이저 HTML 태그(대표, 2026.11.22 13:57)
 GOOGLE_VERIFY = ""
@@ -71,7 +71,7 @@ def shop(pid):
     return SHOP % ix if ix else ""
 
 
-# 로고: 대표가 준 그림(A 리본 표지 + AiHuman, 2026.11.22) 그대로. 어두운 바닥글은 글자만 흰색 판(logo-w.png)
+# 로고: 대표가 준 그림(A 리본 표지 + AIHuman, 2026.11.22) 그대로. 어두운 바닥글은 글자만 흰색 판(logo-w.png)
 LOGO = '<a class="logo" href="/" aria-label="%s(%s) 홈"><img src="/assets/img/logo.png?v=%s" width="542" height="120" alt="%s"></a>' % (BRAND, BRAND_KO, VER, BRAND)
 LOGO_W = '<a class="logo" href="/" aria-label="%s(%s) 홈"><img src="/assets/img/logo-w.png?v=%s" width="542" height="120" alt="%s"></a>' % (BRAND, BRAND_KO, VER, BRAND)
 
@@ -138,7 +138,7 @@ def footer(home=False):
 
 
 # ---------------- 구조화 데이터 ----------------
-ALT = [BRAND_KO, "에이아이휴먼", "AI Human", "AiHuman AI 휴머나이저", HOST]
+ALT = [BRAND_KO, "에이아이휴먼", "AI Human", "AIHuman AI 휴머나이저", HOST]
 ORG = {"@type": "Organization", "@id": SITE + "/#org", "name": BRAND, "alternateName": ALT, "url": SITE + "/",
        "logo": {"@type": "ImageObject", "url": SITE + "/assets/img/logo-512.png", "width": 512, "height": 512},
        "slogan": "AI휴먼 | AI 휴머나이징 전문 서비스",
@@ -503,8 +503,8 @@ def build_pricing():
     body += MK.PRICING_MORE   # 11.23: 요금 쪽만의 구역(사이트마다 다른 글)
     body += '<section class="sec alt"><div class="wrap-n"><h2 class="h2 center">결제 · 토큰 자주 묻는 질문</h2>%s</div></section>' % faq_html(P.PRICE_FAQ)
     body += cta_band("먼저 무료로 검사해 보세요", "AI 작성률이 높게 나온 문장만 휴머나이징하면 토큰을 아낄 수 있습니다.")
-    page("pricing/", "AI 휴머나이징 가격 · 요금 · 토큰 충전 | AiHuman(AI휴먼)", "AiHuman AI 휴머나이징 가격. 라이트 100토큰 9,900원부터 맥스 2,000토큰 69,900원까지. 월 구독 없이 한 번 충전, AI 작성률 검사 무료 · 휴머나이징 1,000자 6토큰.",
-         body, ld=[ld_offers(), ld_faq(P.PRICE_FAQ), ld_crumbs(trail)], priority="0.9", keywords="AI 휴머나이징 가격, AI 휴머나이징 요금, AI 작성률 낮추기 가격, AiHuman 요금")
+    page("pricing/", "AI 휴머나이징 가격 · 요금 · 토큰 충전 | AIHuman(AI휴먼)", "AIHuman AI 휴머나이징 가격. 라이트 100토큰 9,900원부터 맥스 2,000토큰 69,900원까지. 월 구독 없이 한 번 충전, AI 작성률 검사 무료 · 휴머나이징 1,000자 6토큰.",
+         body, ld=[ld_offers(), ld_faq(P.PRICE_FAQ), ld_crumbs(trail)], priority="0.9", keywords="AI 휴머나이징 가격, AI 휴머나이징 요금, AI 작성률 낮추기 가격, AIHuman 요금")
 
 
 def build_faq():
@@ -515,7 +515,7 @@ def build_faq():
     body = '<section class="ph"><div class="wrap">%s<h1 class="h1">자주 묻는 질문</h1><p class="lead">AI 휴머나이저, AI 작성률, AI 탐지기, 결제와 토큰에 대해 자주 받는 질문을 모았습니다.</p></div></section>' % crumbs_html(trail)
     body += '<section class="sec-s"><div class="wrap-n">%s<h2 class="faq-h">검색어로 찾는 가이드</h2><div class="links">%s</div></div></section>' % ("".join('<h2 class="faq-h">%s</h2>%s' % (h, faq_html(L)) for h, L in groups), gl)
     body += cta_band()
-    page("faq/", "자주 묻는 질문 · AI 휴머나이저 FAQ | AiHuman(AI휴먼)", "AI 휴머나이저가 무엇인지, AI 탐지기의 AI 작성률을 낮출 수 있는지, 무료인지, 글이 저장되는지, 결제와 토큰은 어떻게 되는지 답해 드립니다.",
+    page("faq/", "자주 묻는 질문 · AI 휴머나이저 FAQ | AIHuman(AI휴먼)", "AI 휴머나이저가 무엇인지, AI 탐지기의 AI 작성률을 낮출 수 있는지, 무료인지, 글이 저장되는지, 결제와 토큰은 어떻게 되는지 답해 드립니다.",
          body, ld=[ld_faq(allq), ld_crumbs(trail)], priority="0.8")
 
 
@@ -530,7 +530,7 @@ def build_guides():
             '<section class="sec-s"><div class="wrap"><div class="gcards">%s</div></div></section>') % (crumbs_html(trail0), cards)
     body += MK.GUIDE_HUB   # 11.23 3차: 가이드 모음 쪽만의 읽는 순서 · 쓰는 방식
     body += cta_band()
-    page("guide/", "AI 휴머나이징 가이드 · AI 작성률 낮추는 법 | AiHuman(AI휴먼)", "AI 작성률 낮추기, 카피킬러 · GPT킬러 AI 작성률, 챗GPT 작성률, AI 탐지기 원리, 논문 · 자기소개서 AI 작성률, AI 휴머나이징 사이트 비교까지 정리한 가이드.",
+    page("guide/", "AI 휴머나이징 가이드 · AI 작성률 낮추는 법 | AIHuman(AI휴먼)", "AI 작성률 낮추기, 카피킬러 · GPT킬러 AI 작성률, 챗GPT 작성률, AI 탐지기 원리, 논문 · 자기소개서 AI 작성률, AI 휴머나이징 사이트 비교까지 정리한 가이드.",
          body, ld=[ld_crumbs(trail0), {"@type": "CollectionPage", "name": BRAND + " AI 휴머나이징 가이드", "url": SITE + "/guide/", "hasPart": [{"@type": "Article", "headline": g["h1"], "url": SITE + "/" + gpath(g)} for g in P.GUIDES]}], priority="0.8")
     for g in P.GUIDES:
         trail = [("가이드", "guide/"), (g["h1"], gpath(g))]

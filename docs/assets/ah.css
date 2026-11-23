@@ -1,5 +1,5 @@
-/* AiHuman 사이트 스타일 1.0 (2026.11.22) · 글꼴 Pretendard(SIL OFL 1.1)
-   색은 대표가 준 로고에서: 남색 #00113A(AiHuman 글자) · 파랑 #0B63F6 · 하늘 #1CA6FE(A 리본 · i 점).
+/* AIHuman 사이트 스타일 1.0 (2026.11.22) · 글꼴 Pretendard(SIL OFL 1.1)
+   색은 대표가 준 로고에서: 남색 #00113A(AIHuman 글자) · 파랑 #0B63F6 · 하늘 #1CA6FE(A 리본 · i 점).
    한국휴머나이징 레이아웃을 바탕으로 다듬음: 어두운 첫 화면 + 떠 있는 검사 도구 판 · 가이드 구역 · 어두운 바닥글.
    AI 문장 보라 · 사람 문장 초록은 검사 결과와 같은 뜻으로만 씀 */
 :root{
@@ -42,7 +42,7 @@ button{font:inherit;cursor:pointer}
 .hd{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid transparent;transition:border-color .2s,box-shadow .2s}
 .hd.on{border-bottom-color:var(--line);box-shadow:0 10px 26px -18px rgba(0,17,58,.4)}
 .hd-in{display:flex;align-items:center;gap:22px;height:74px}
-/* 로고: 대표가 준 그림(A 리본 표지 + AiHuman) 그대로 */
+/* 로고: 대표가 준 그림(A 리본 표지 + AIHuman) 그대로 */
 .logo{display:flex;align-items:center;flex:none}
 .logo img{display:block;height:40px;width:auto}
 .nav{display:flex;gap:2px;margin-left:8px}

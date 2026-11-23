@@ -1,4 +1,4 @@
-# AiHuman(AI휴먼) · 검색 엔진과 AI 검색이 모두 읽을 수 있게 엽니다
+# AIHuman(AI휴먼) · 검색 엔진과 AI 검색이 모두 읽을 수 있게 엽니다
 User-agent: Googlebot
 Allow: /
 

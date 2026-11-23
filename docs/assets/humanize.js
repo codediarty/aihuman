@@ -1,4 +1,4 @@
-/* AiHuman AI 작성률 검사 · 휴머나이징 12.1 (2026.10.21 오후) → 13.13 (2026.10.31)
+/* AIHuman AI 작성률 검사 · 휴머나이징 12.1 (2026.10.21 오후) → 13.13 (2026.10.31)
    - 13.30(2026.11.21 밤) 토큰 코드가 있어도 'AI 작성률 검사'는 무료 검사(코드 없을 때와 같은 범위 · 0토큰, 파일을 올리면 바로 검사).
      토큰은 휴머나이징과, 토큰 숫자가 적힌 '전체 검사 결과 보기'(모든 문장 위치 · 구간 · 결과상세내역서, check opt.paid)를 누를 때만 빠짐.
      같은 글을 이미 전체 검사했으면(조각이 모두 S.cache) 토큰 없이 전체 화면 그대로. 코드만 넣으면 무료 결과는 그대로 두고 단추만 토큰 화면으로(resume).
@@ -89,7 +89,7 @@
     return Object.assign({}, p, { bonus: bn > 0 ? bn : 0, desc: p.pg ? (p.doc || '논문') + ' 검사와 휴머나이징 약 ' + n2(p.pg) + '페이지' : k ? '레포트(3,000자) 약 ' + n2(k) + '편' : (p.who || '') });   // 13.7 짧게(값 · 대상 없이)
   }
   function prodList() {   // 13.5 칸은 사이트 표(PRODS)가 기준. 서버 am.passinfo products 는 결제 페이지 주소(link)만 가져옴
-    var L = (S.info && S.info.products) || [], A = window.AMP || {};   // AiHuman: 이 사이트 상품 번호(products.js)가 있으면 서버 주소(AIMarker 상품)보다 먼저
+    var L = (S.info && S.info.products) || [], A = window.AMP || {};   // AIHuman: 이 사이트 상품 번호(products.js)가 있으면 서버 주소(AIMarker 상품)보다 먼저
     return PRODS.map(function (p) { if (A.idx && A.idx[p.id]) return p; var s = L.filter(function (x) { return x && x.id === p.id; })[0]; return s && s.link ? Object.assign({}, p, { link: s.link }) : p; });
   }
   function prod(id) { id = OLD_ID[id] || id; var L = prodList(); for (var i = 0; i < L.length; i++) if (L[i].id === id) return withDesc(L[i]); return null; }
@@ -348,7 +348,7 @@
   var lastPeek = Date.now();   // 13.13 결제 창에서 돌아오면(창이 다시 앞으로) 남은 토큰을 새로(20초에 한 번까지)
   window.addEventListener('focus', function () { if (!S.pass || S.busy || Date.now() - lastPeek < 20000) return; lastPeek = Date.now(); peek(); });
   var infoP = call('am.passinfo', {}, 20000).then(function (r) { S.info = r; S.proReady = r.proReady !== false; proBtn(); renderPass(); return r; }).catch(function () { proBtn(); return null; });
-  function proBtn() { btnP.disabled = !!S.busy; tags(); btnP.title = 'AI 문체를 사람 말투로 바꿉니다(생성 AI 없이 AiHuman 인간화 엔진)'; }   // 11.0 인간화 엔진이 꺼져도(proReady false) 기본 엔진으로 되므로 단추는 켜 둠
+  function proBtn() { btnP.disabled = !!S.busy; tags(); btnP.title = 'AI 문체를 사람 말투로 바꿉니다(생성 AI 없이 AIHuman 인간화 엔진)'; }   // 11.0 인간화 엔진이 꺼져도(proReady false) 기본 엔진으로 되므로 단추는 켜 둠
   function payReady() { return !!(S.info && S.info.pay && S.info.pay.ready && S.info.pay.clientKey); }
 
   /* ---------- 글 나누기(같은 글은 언제나 같게) ---------- */
@@ -397,7 +397,7 @@
   var ADV = {
     unfit: '현재 상태로 제출하거나 게시하는 것은 권장하지 않습니다. 검출 문장을 내 말로 고쳐 쓰거나 휴머나이징으로 바꾼 뒤 다시 검사해 보세요.',
     risk: '제출하거나 게시하기 전에 검출 문장을 한 번 더 고쳐 쓰는 것을 권합니다. 고친 뒤 다시 검사하면 같은 기준으로 비교할 수 있습니다.',
-    safe: '눈에 띄는 AI 작성 패턴이 적습니다. AiHuman 기준의 추정값이라 다른 검사기와 읽는 사람은 다르게 볼 수 있으니, 제출처의 AI 사용 규정을 함께 확인하세요.',
+    safe: '눈에 띄는 AI 작성 패턴이 적습니다. AIHuman 기준의 추정값이라 다른 검사기와 읽는 사람은 다르게 볼 수 있으니, 제출처의 AI 사용 규정을 함께 확인하세요.',
     short: J.SHORT + '자 이상, 가능하면 세 문장 이상을 넣어 다시 검사해 주세요.'
   };
   function judge(s) {
@@ -515,7 +515,7 @@
   function prog(label, i, n, sub) {
     var pct = n ? Math.round(i / n * 100) : 30;
     var el = $('.hz7-prog', out);
-    if (!el) { out.innerHTML = '<div class="hz7-prog"><b></b><i><em></em></i><p>' + (sub || '문장마다 앞뒤 문장과 함께 AI 글 패턴을 살피고, AiHuman 판정 기준 1.6으로 판정합니다. 표지 · 목차 · 참고문헌 같은 줄은 빼고 본문 문장만 셉니다. 같은 글은 다시 검사해도 같은 결과가 나옵니다.') + '</p></div>'; el = $('.hz7-prog', out); stat(label); }
+    if (!el) { out.innerHTML = '<div class="hz7-prog"><b></b><i><em></em></i><p>' + (sub || '문장마다 앞뒤 문장과 함께 AI 글 패턴을 살피고, AIHuman 판정 기준 1.6으로 판정합니다. 표지 · 목차 · 참고문헌 같은 줄은 빼고 본문 문장만 셉니다. 같은 글은 다시 검사해도 같은 결과가 나옵니다.') + '</p></div>'; el = $('.hz7-prog', out); stat(label); }
     $('b', el).textContent = label + (n > 1 ? ' ' + i + ' / ' + n : ''); $('em', el).style.width = Math.max(6, pct) + '%';
     el.classList.toggle('ind', n <= 1 && i < n);   // 한 번에 끝나는 검사는 흐르는 막대로
   }
@@ -1232,7 +1232,7 @@
     var ba = F.changes ? '<div class="hz13-ba"><div class="b"><p class="lb">다듬기 전 · ' + esc(PT) + (TQ ? ' · AI 작성률 <b>' + TQ.before + '%</b>' : '') + '</p><div class="hz7-text">' + esc(F.src) + '</div></div>' +
       '<div class="a"><p class="lb">다듬은 뒤 · ' + n2(F.changes) + '곳 바뀜' + (TQ ? ' · AI 작성률 <b>' + TQ.after + '%</b>' : '') + '</p><div class="hz7-text rd" aria-hidden="true">' + redact(F.text) + '</div><p class="sr">다듬은 글은 글 전체 휴머나이징에서 열립니다.</p><p class="lk" aria-hidden="true">' + ico('lock') + '<span>글 전체 휴머나이징에서 열립니다</span></p></div></div>' : '';
     stat(h2); setStep(3); collapse(true); outShown();
-    out.innerHTML = '<div class="hz7-res hz9"><section class="hz9-ph"><h2>' + esc(h2) + '</h2><ul class="hz9-tagl"><li class="on">휴머나이징 무료 맛보기</li><li>바꾼 곳 <b>' + n2(F.changes) + '</b></li>' + (TQ ? '<li>' + esc(PT) + ' AI 작성률 <b>' + TQ.before + '% → ' + TQ.after + '%</b></li>' : '') + '' + (TN ? '<li>말투 자동 · ' + TN + '</li>' : '') + '<li>생성 AI 없이 AiHuman 인간화 엔진</li></ul></section>' +
+    out.innerHTML = '<div class="hz7-res hz9"><section class="hz9-ph"><h2>' + esc(h2) + '</h2><ul class="hz9-tagl"><li class="on">휴머나이징 무료 맛보기</li><li>바꾼 곳 <b>' + n2(F.changes) + '</b></li>' + (TQ ? '<li>' + esc(PT) + ' AI 작성률 <b>' + TQ.before + '% → ' + TQ.after + '%</b></li>' : '') + '' + (TN ? '<li>말투 자동 · ' + TN + '</li>' : '') + '<li>생성 AI 없이 AIHuman 인간화 엔진</li></ul></section>' +
       (F.changes ? ba + '<p class="hz13-fxn">' + ico('check') + '<span>' + n2(F.changes) + '곳을 의미와 문맥은 그대로 둔 채 사람 말투로 바꿨습니다.' + (TQ ? ' 같은 판정 기준으로 다시 재면 ' + esc(PT) + '의 AI 작성률이 ' + TQ.before + '%에서 ' + TQ.after + '%가 됩니다.' : '') + ' 숫자, 고유명사, 인용은 그대로 둡니다. 바꾼 문장과 이유는 글 전체 휴머나이징에서 열립니다.</span></p>' : '<div class="hz9-one"><p class="lb">살펴본 ' + (rest ? PT : '글') + '</p><div class="hz7-text">' + esc(F.src) + '</div></div>') +
       (F.toneNote ? '<p class="hz7-fineprint">' + esc(F.toneNote) + '</p>' : '') +
       (F.changes ? '<section class="hz9-sec"><div class="hz9-sec-h"><h3>바꾼 곳 ' + n2(F.changes) + '곳</h3><p>숫자, 고유명사, 인용은 그대로 둡니다</p></div>' + catChips(F.samples) + '</section>' : '') +
@@ -1322,7 +1322,7 @@
     if (F && F.kind === 'pro' && F.text && S.pass) b += '<button class="btn btn-p btn-s hz9-less" type="button" data-act="more" title="바꾼 글로 한 번 더 휴머나이징합니다"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg><span>더 줄이기' + (isCr() ? ' · ' + tk(humCost(chunk(F.text).parts)) + '토큰' : '') + '</span></button>';
     return '<div class="hz9-cmp-act">' + b + '</div>';
   }
-  function baseName() { var n = (S.src && (!S.src.edited || srcLike(cur())) && S.src.name) || 'AiHuman'; return n.replace(/\.[^.]+$/, '').slice(0, 60) || 'AiHuman'; }
+  function baseName() { var n = (S.src && (!S.src.edited || srcLike(cur())) && S.src.name) || 'AIHuman'; return n.replace(/\.[^.]+$/, '').slice(0, 60) || 'AIHuman'; }
   function getFile(kind) {
     var F = S.fx; if (!F || !F.text || !window.AMTextIn) return;
     var name = baseName() + '_휴머나이징', s = S.src, mine = !!(s && srcLike(F.src));
@@ -1404,7 +1404,7 @@
     var bars = (M.feat || []).map(function (f) { return '<div class="rb"><span>' + esc(f.name) + '</span><i><em style="width:' + Math.max(2, f.share) + '%"></em></i><b>' + f.share + '%</b></div>'; }).join('');
     var tiles = M.segs.map(function (g) { return '<span class="rt' + (g.ai ? ' ai' : '') + '"><b>' + pad3(g.no) + '</b>' + g.share + '%</span>'; }).join('');
     var docName = S.docName ? esc(S.docName) : '붙여 넣은 글';
-    el.innerHTML = '<div class="rp8"><header class="rp8-top"><div><small>AiHuman · aihuman.ai.kr</small><h1>AI 작성률 검사 결과상세내역서</h1></div><dl><div><dt>검사 번호</dt><dd>' + esc(M.cn) + '</dd></div><div><dt>발행일</dt><dd>' + esc(stamp(new Date())) + '</dd></div><div><dt>판정 기준</dt><dd>' + esc(M.critName || 'AiHuman 판정 기준 1.6') + '</dd></div><div><dt>판별 모델</dt><dd>' + esc(M.model || 'det') + '</dd></div></dl></header>' +
+    el.innerHTML = '<div class="rp8"><header class="rp8-top"><div><small>AIHuman · aihuman.ai.kr</small><h1>AI 작성률 검사 결과상세내역서</h1></div><dl><div><dt>검사 번호</dt><dd>' + esc(M.cn) + '</dd></div><div><dt>발행일</dt><dd>' + esc(stamp(new Date())) + '</dd></div><div><dt>판정 기준</dt><dd>' + esc(M.critName || 'AIHuman 판정 기준 1.6') + '</dd></div><div><dt>판별 모델</dt><dd>' + esc(M.model || 'det') + '</dd></div></dl></header>' +
       '<section class="rp8-sum ' + bandCls(b.key) + '"><div class="g">' + gauge(M.rate, b, { chars: M.chars }) + '</div><div class="j"><p class="hz9-hl">' + stIco(b.key) + '<span>' + esc(headOf(b)) + '</span></p><p class="sub">' + esc(subLine(M)) + '</p><div class="hz9-row"><span class="hz9-lbl">판정</span>' + chip(b) + '</div>' + scaleFor(M) + whyHtml(b) + '</div></section>' +
       '<table class="rp8-kv"><tr><th>검사한 글</th><td>' + docName + ' · ' + n2(M.chars) + '자(공백 제외) · ' + n2(M.n) + '문장</td><th>' + (isCr() ? '토큰 코드' : '이용권') + '</th><td>' + esc(S.ps ? (S.ps.credit ? (S.ps.biz ? '기업 토큰' : '토큰') : S.ps.name) : '토큰') + '</td></tr><tr><th>AI 검출 글자 수</th><td>' + n2(fChars(M)) + ' / ' + n2(M.chars) + '자(본문의 ' + (M.chars ? Math.round(fChars(M) / M.chars * 100) : 0) + '%, AI 작성률 ' + M.rate + '%)</td><th>AI 검출 구간 수</th><td>' + M.segAi + ' / ' + segN + '구간(' + pct(M.segAi, segN) + '%)</td></tr><tr><th>AI 검출 문장 수</th><td>' + n + ' / ' + n2(M.n) + '문장(' + pct(n, M.n) + '%)</td><th>AI 대화창 흔적</th><td>' + (M.chat ? M.chatList.map(function (c) { return esc(c.name) + ' ' + c.n + '곳'; }).join(', ') : '없음') + '</td></tr></table>' +
       '<h2>종합 분석 의견</h2><ul class="rp8-op">' + M.opinion.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul><p class="rp8-adv ' + bandCls(b.key) + '"><b>' + ({ unfit: '개선 필요', risk: '수정 권고' }[b.key] || '참고') + '</b>' + esc(ADV[b.key] || ADV.short) + '</p>' + (M.opDetail.length ? '<ul class="rp8-fix">' + M.opDetail.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '') +
@@ -1413,8 +1413,8 @@
       '<h2>02 · 통합 원문 전문 분석</h2>' + legendHtml() + legendNote() + '<div class="rp8-doc">' + docH + '</div>' +
       (rows ? '<h2>03 · AI 검출 구간 요약</h2><table class="rp8-t"><thead><tr><th>구간</th><th>글자 수</th><th>AI 글자</th><th>비중</th><th>AI 검출 문장</th><th>주요 특성</th><th>권고</th></tr></thead><tbody>' + rows + '</tbody></table>' : '') +
       '<h2>04 · 문장 판정 분포</h2><div class="rp8-dist"><div class="rd"><i class="ai" style="width:' + pct(n, M.n) + '%"></i></div><p><span><i class="ai"></i>AI 검출 문장 <b>' + n + '문장</b>(' + pct(n, M.n) + '%)</span><span><i></i>표시 없음 <b>' + Math.max(0, M.n - n) + '문장</b></span></p></div>' +
-      '<h2>05 · 판정 기준(' + esc(M.critName || 'AiHuman 판정 기준 1.6') + ')</h2><ul class="rp8-crit"><li><b>AI 검출 문장</b> 판별 모델이 앞뒤 문장과 함께 보고 매긴 AI 점수가 ' + J.MID + ' 이상인 문장, 또는 ' + J.MID + ' 미만이어도 앞뒤 문맥까지 본 구간 판정에서 AI로 검출된 문장. 결과에는 한 가지 표시(AI 검출)로 나타냄</li><li><b>AI 작성률</b> 문장마다 AI 점수에 따른 AI 가능성(7~92%)을 글자 수(공백 제외)만큼 반영해 더한 값</li>' + (M.ck ? '<li><b>논문 · 연구 글</b> 다른 AI 검사기의 실제 결과확인서와 대조해 맞춘 엄격 기준으로 문장 점수를 매김. 본문 문장만 세므로 목차 · 표 · 참고문헌까지 넣어 나누는 검사기의 수치보다 높게 나올 수 있음</li>' : '') + '<li><b>구간</b> 문단 단위(30자 미만은 다음 문단과 합치고 1,000자를 넘으면 문장 경계에서 나눔). 구간 글자의 ' + J.SEG_AI + '% 이상이 AI 검출 문장이면 검출 구간</li><li><b>부적합(AI 검출됨)</b> 작성률 ' + J.UNFIT_RATE + '% 이상, 또는 검출 구간이 전체의 절반 이상(2구간 이상일 때), 또는 AI 대화창 흔적 1곳 이상</li><li><b>고위험(AI 일부 검출)</b> 작성률 ' + J.RISK_RATE + '% 이상, 또는 검출 구간 1곳 이상, 또는 AI 점수 ' + J.MID + ' 이상 문장 1개 이상</li><li><b>안전(AI 검출 안 됨)</b> 위에 해당하지 않음 · ' + J.SHORT + '자 미만은 판단 보류</li></ul>' +
-      '<footer class="rp8-note">본 결과상세내역서는 참고용 분석 자료이며, 최종 판단은 제출처의 기준과 심사자의 판단에 따릅니다. AI 작성률과 판정은 판별 모델과 정해진 판정 기준으로 계산한 추정값이며 증명이 아니고, 법률 자문이 아닙니다. AI를 사용하지 않았다는 증명서가 아닙니다. 사람이 쓴 글도 높게, AI가 쓴 글도 낮게 나올 수 있으며 다른 검사기와 결과가 다를 수 있습니다. 같은 글을 다시 넣으면 같은 검사 번호와 같은 결과가 나옵니다. 결과만으로 다른 사람을 판단하지 마세요. 글은 저장하지 않으며 이 결과상세내역서는 이용자의 브라우저에서 만들어졌습니다. AiHuman(aihuman.ai.kr) · 운영 성균관컨설팅</footer></div>';
+      '<h2>05 · 판정 기준(' + esc(M.critName || 'AIHuman 판정 기준 1.6') + ')</h2><ul class="rp8-crit"><li><b>AI 검출 문장</b> 판별 모델이 앞뒤 문장과 함께 보고 매긴 AI 점수가 ' + J.MID + ' 이상인 문장, 또는 ' + J.MID + ' 미만이어도 앞뒤 문맥까지 본 구간 판정에서 AI로 검출된 문장. 결과에는 한 가지 표시(AI 검출)로 나타냄</li><li><b>AI 작성률</b> 문장마다 AI 점수에 따른 AI 가능성(7~92%)을 글자 수(공백 제외)만큼 반영해 더한 값</li>' + (M.ck ? '<li><b>논문 · 연구 글</b> 다른 AI 검사기의 실제 결과확인서와 대조해 맞춘 엄격 기준으로 문장 점수를 매김. 본문 문장만 세므로 목차 · 표 · 참고문헌까지 넣어 나누는 검사기의 수치보다 높게 나올 수 있음</li>' : '') + '<li><b>구간</b> 문단 단위(30자 미만은 다음 문단과 합치고 1,000자를 넘으면 문장 경계에서 나눔). 구간 글자의 ' + J.SEG_AI + '% 이상이 AI 검출 문장이면 검출 구간</li><li><b>부적합(AI 검출됨)</b> 작성률 ' + J.UNFIT_RATE + '% 이상, 또는 검출 구간이 전체의 절반 이상(2구간 이상일 때), 또는 AI 대화창 흔적 1곳 이상</li><li><b>고위험(AI 일부 검출)</b> 작성률 ' + J.RISK_RATE + '% 이상, 또는 검출 구간 1곳 이상, 또는 AI 점수 ' + J.MID + ' 이상 문장 1개 이상</li><li><b>안전(AI 검출 안 됨)</b> 위에 해당하지 않음 · ' + J.SHORT + '자 미만은 판단 보류</li></ul>' +
+      '<footer class="rp8-note">본 결과상세내역서는 참고용 분석 자료이며, 최종 판단은 제출처의 기준과 심사자의 판단에 따릅니다. AI 작성률과 판정은 판별 모델과 정해진 판정 기준으로 계산한 추정값이며 증명이 아니고, 법률 자문이 아닙니다. AI를 사용하지 않았다는 증명서가 아닙니다. 사람이 쓴 글도 높게, AI가 쓴 글도 낮게 나올 수 있으며 다른 검사기와 결과가 다를 수 있습니다. 같은 글을 다시 넣으면 같은 검사 번호와 같은 결과가 나옵니다. 결과만으로 다른 사람을 판단하지 마세요. 글은 저장하지 않으며 이 결과상세내역서는 이용자의 브라우저에서 만들어졌습니다. AIHuman(aihuman.ai.kr) · 운영 성균관컨설팅</footer></div>';
     var done = function () { document.body.classList.remove('hz7-printing'); window.removeEventListener('afterprint', done); };
     window.addEventListener('afterprint', done);
     document.body.classList.add('hz7-printing');
@@ -1441,11 +1441,11 @@
   function stepsHtml() {   // 바로 결제도, 결제 페이지도 없을 때(주문 → 결제 안내 메일): 결제 순서를 미리
     return '<ol class="hz13-steps" aria-label="결제 순서"><li><b>1</b><span>지금 주문<small>이메일만 적으면 됩니다</small></span></li><li><b>2</b><span>메일로 온 안내대로 카드 · 계좌이체 결제<small>결제 안내 메일은 영업일 하루 안에</small></span></li><li><b>3</b><span>메일로 받은 코드를 넣으면 바로 이어서<small>코드는 결제 확인 뒤 영업일 하루 안에</small></span></li></ol>';
   }
-  function shopName(p) { return 'AiHuman ' + p.name + ' · AI 글 인간화 작업 ' + tk(p.cr) + '토큰'; }   // 13.6 성균관컨설팅 결제 페이지의 상품 이름(아임웹 상품 34~37)
-  function gateHtml(p, tu, sh) {   // 13.7 간단하게: AiHuman → 성균관컨설팅 칩 + 두 문장(왜 성균관컨설팅인지 · 코드는 어떻게 오는지). 이메일 · 동의는 결제 페이지 주문서에서
-    return '<div class="hz19-flow" aria-hidden="true"><span class="a">AiHuman</span>' + ico('arrow') + '<span class="s">성균관컨설팅</span></div>' +
-      '<p class="hz19-lead">결제는 AiHuman 운영사 <b>성균관컨설팅</b> 결제 페이지에서 합니다. 회원가입 없이 토스페이 · 카드로 결제하면 ' +
-      (tu ? '지금 코드에 ' + tk(p.cr) + '토큰이 더해집니다(코드를 받았던 이메일로 결제해 주세요).' : '바로(보통 1분 안), 결제할 때 적은 이메일로 보내는 사람 ‘AiHuman’ 메일에 16자리 토큰 코드가 담겨 갑니다.') +
+  function shopName(p) { return 'AIHuman ' + p.name + ' · AI 글 인간화 작업 ' + tk(p.cr) + '토큰'; }   // 13.6 성균관컨설팅 결제 페이지의 상품 이름(아임웹 상품 34~37)
+  function gateHtml(p, tu, sh) {   // 13.7 간단하게: AIHuman → 성균관컨설팅 칩 + 두 문장(왜 성균관컨설팅인지 · 코드는 어떻게 오는지). 이메일 · 동의는 결제 페이지 주문서에서
+    return '<div class="hz19-flow" aria-hidden="true"><span class="a">AIHuman</span>' + ico('arrow') + '<span class="s">성균관컨설팅</span></div>' +
+      '<p class="hz19-lead">결제는 AIHuman 운영사 <b>성균관컨설팅</b> 결제 페이지에서 합니다. 회원가입 없이 토스페이 · 카드로 결제하면 ' +
+      (tu ? '지금 코드에 ' + tk(p.cr) + '토큰이 더해집니다(코드를 받았던 이메일로 결제해 주세요).' : '바로(보통 1분 안), 결제할 때 적은 이메일로 보내는 사람 ‘AIHuman’ 메일에 16자리 토큰 코드가 담겨 갑니다.') +
       ' 영수증과 카드 명세서에는 성균관컨설팅으로 표시됩니다.</p>';
   }
   function shopLink(pid) {   // 12.1 공식 결제처 성균관컨설팅 결제 페이지(서버 AM_BUY_LINKS 또는 사이트 SHOP_IDX 에 상품 번호가 있을 때)
@@ -1518,7 +1518,7 @@
       var req = { orderId: p.payOrderId, orderName: p.orderName, successUrl: U.successUrl, failUrl: U.failUrl, customerEmail: mail };
       if (mode === 'widget') {
         var w = tp.widgets({ customerKey: TP.ANONYMOUS });
-        buyBody.innerHTML = '<h2>결제 수단 고르기</h2><p class="hz7-dlg-n">' + esc(r.name) + ' · ' + n2(p.amount) + '원(부가세 포함) · 주문 번호 ' + esc(r.id) + '</p><div id="hzPayMethods"></div><div id="hzPayAgree"></div><button class="btn btn-p btn-l" type="button" id="hzPayGo">' + ico('card') + '<span>' + n2(p.amount) + '원 결제하기</span></button><p class="msg" role="status"></p><p class="hz7-dlg-n">결제는 토스페이먼츠 결제 화면에서 이루어지며, AiHuman은 카드 번호 등 결제 수단 정보를 받지 않습니다.</p>';
+        buyBody.innerHTML = '<h2>결제 수단 고르기</h2><p class="hz7-dlg-n">' + esc(r.name) + ' · ' + n2(p.amount) + '원(부가세 포함) · 주문 번호 ' + esc(r.id) + '</p><div id="hzPayMethods"></div><div id="hzPayAgree"></div><button class="btn btn-p btn-l" type="button" id="hzPayGo">' + ico('card') + '<span>' + n2(p.amount) + '원 결제하기</span></button><p class="msg" role="status"></p><p class="hz7-dlg-n">결제는 토스페이먼츠 결제 화면에서 이루어지며, AIHuman은 카드 번호 등 결제 수단 정보를 받지 않습니다.</p>';
         return w.setAmount({ currency: 'KRW', value: p.amount }).then(function () { return Promise.all([w.renderPaymentMethods({ selector: '#hzPayMethods', variantKey: 'DEFAULT' }), w.renderAgreement({ selector: '#hzPayAgree', variantKey: 'AGREEMENT' })]); }).then(function () {
           var go = $('#hzPayGo'), m2 = buyBody.querySelector('.msg');
           go.addEventListener('click', function () { go.disabled = true; say(m2, '결제 창으로 이동합니다…', 'ok'); Promise.resolve(w.requestPayment(req)).catch(function (e) { go.disabled = false; say(m2, payErr(e)); }); });
@@ -1543,7 +1543,7 @@
         var tail = to ? String(S.pass).replace(/[^0-9A-Za-z]/g, '').slice(-4) : '';
         buyBody.innerHTML = '<h2 id="hzBuyT" tabindex="-1">' + (win ? '성균관컨설팅 결제 페이지를 새 창으로 열었습니다' : '성균관컨설팅 결제 페이지에서 결제해 주세요') + '</h2><div class="hz7-done hz18-go">' +
           '<p class="sum"><b>' + esc(pk.name) + ' · ' + tk(pk.cr) + '토큰' + (pk.bonus ? ' <i>+' + tk(pk.bonus) + ' 포함</i>' : '') + '</b><span>' + n2(pk.price) + '원 · 부가세 포함' + (to ? ' · 지금 코드(끝 ' + esc(tail) + ')에 충전' : '') + '</span></p>' +
-          '<p class="hz7-dlg-n">' + (to ? '코드를 받았던 이메일로 결제해 주세요. 결제가 확인되면 지금 코드에 ' + tk(pk.cr) + '토큰이 더해집니다.' : '회원가입 없이 결제하면 바로(보통 1분 안), 결제할 때 적은 이메일로 보내는 사람 ‘AiHuman’ 메일에 16자리 토큰 코드가 담겨 갑니다. ' + (S.job ? '메일의 ‘AI 휴머나이징 바로 쓰기’를 누르거나 이 창에 코드를 넣으면 하던 일을 이어서 합니다(글은 이 브라우저에만 잠시 보관). ' : '') + '메일이 안 보이면 스팸함을 확인하고, 그래도 없으면 contact@skkc.co.kr 로 주문 번호를 보내 주세요.') + '</p>' +
+          '<p class="hz7-dlg-n">' + (to ? '코드를 받았던 이메일로 결제해 주세요. 결제가 확인되면 지금 코드에 ' + tk(pk.cr) + '토큰이 더해집니다.' : '회원가입 없이 결제하면 바로(보통 1분 안), 결제할 때 적은 이메일로 보내는 사람 ‘AIHuman’ 메일에 16자리 토큰 코드가 담겨 갑니다. ' + (S.job ? '메일의 ‘AI 휴머나이징 바로 쓰기’를 누르거나 이 창에 코드를 넣으면 하던 일을 이어서 합니다(글은 이 브라우저에만 잠시 보관). ' : '') + '메일이 안 보이면 스팸함을 확인하고, 그래도 없으면 contact@skkc.co.kr 로 주문 번호를 보내 주세요.') + '</p>' +
           '<a class="btn btn-p btn-l" href="' + esc(shop) + '" target="_blank" rel="noopener">' + ico('open') + '<span>' + (win ? '결제 페이지가 안 보이면 다시 열기' : '결제 페이지 열기') + '</span></a>' +
           (to ? '' : '<button class="btn btn-g" type="button" data-code>코드를 받았어요 · 코드 넣기</button>') + '</div>';
         var hL = $('#hzBuyT'); if (hL) { try { hL.focus({ preventScroll: true }); } catch (eF2) { hL.focus(); } }

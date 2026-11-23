@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""AiHuman 로고(대표가 준 그림 2026.11.22: A 리본 표지 + AiHuman 글자 + 'AI휴먼 | AI 휴머나이징 전문 서비스')로 사이트 그림 만들기
+"""AIHuman 로고(대표가 준 그림 2026.11.22: A 리본 표지 + AIHuman 글자 + 'AI휴먼 | AI 휴머나이징 전문 서비스')로 사이트 그림 만들기
 logo-source.png(흰 바탕) -> 흰색을 투명으로 바꿔
   docs/assets/img/logo.png        표지 + 글자(머리글, 높이 120px · 화면에서는 40px 안팎)
   docs/assets/img/logo-w.png      어두운 바탕용(글자만 흰색, i 점 · 표지 색은 그대로)
@@ -15,9 +15,11 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 IMG = os.path.join(ROOT, "docs", "assets", "img")
 os.makedirs(IMG, exist_ok=True)
-src = Image.open(os.path.join(HERE, "logo-source.png")).convert("RGB")
+# 2026.11.23 대표 19:05: 이름을 AIHuman 으로. 대표가 준 logo-source.png 는 그대로 두고, 글자만 AIHuman(AI 파랑 · Human 남색)으로 바꾼
+# logo-source-aihuman.png(scratch mk_aihuman_logo.py: i 지우고 H 기둥 굵기의 I, A · I 를 #0B63F6)로 만듦
+src = Image.open(os.path.join(HERE, "logo-source-aihuman.png")).convert("RGB")
 
-# 그림 속 자리(2172x724): 표지 x150~746 · y160~566, 글자 AiHuman x756~1993 · y217~424, 아래 줄 y462~522
+# 그림 속 자리(2172x724): 표지 x150~746 · y160~566, 글자 AIHuman x756~1993 · y217~424, 아래 줄 y462~522
 MARK = (138, 148, 758, 578)
 WORD = (750, 205, 2004, 436)
 LOGO = (138, 148, 2004, 578)   # 아래 줄(AI휴먼 | …)은 흰색으로 지우고 씀(no_sub)
@@ -44,13 +46,17 @@ def to_h(im, h):
 
 
 def light(im, x_from):
-    """어두운 바탕용: 글자(AiHuman · 아래 줄)의 남색 · 회색만 흰색으로. 표지(x_from 왼쪽)와 파란 i 점은 그대로"""
+    """어두운 바탕용: 글자(AIHuman · 아래 줄)의 남색 · 회색만 흰색으로. 표지(x_from 왼쪽)와 파란 i 점은 그대로"""
     a = np.asarray(im).astype(np.float32)
     r, g, b = a[..., 0], a[..., 1], a[..., 2]
     cols = np.zeros(r.shape, bool); cols[:, x_from:] = True
     dark = cols & ~((b > 170) & (r < 120) & (b - r > 90))   # 파란 점(#0386FF 쪽)이 아닌 글자
     for c in (0, 1, 2):
         a[..., c] = np.where(dark, 255, a[..., c])
+    # 2026.11.23 AIHuman: 글자 'AI'(파랑 #0B63F6)는 어두운 바탕에서 잘 보이게 밝은 파랑(#4D9BFF)으로(표지 · 아래 줄은 그대로)
+    blue = cols & ~dark & (a[..., 3] > 0)
+    for c, v in zip((0, 1, 2), (77, 155, 255)):
+        a[..., c] = np.where(blue, v, a[..., c])
     return Image.fromarray(a.round().astype(np.uint8), "RGBA")
 
 

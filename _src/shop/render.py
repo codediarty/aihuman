@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-"""AiHuman 아임웹 상품 그림 · 토큰 이용 안내 그림 · 공유 그림(og.png) 만들기
+"""AIHuman 아임웹 상품 그림 · 토큰 이용 안내 그림 · 공유 그림(og.png) 만들기
 python3 _src/shop/render.py
   -> _src/shop/out/ah-<id>-1x1.jpg (1200x1200), ah-tokens-guide.png (1080x1350)
   -> docs/assets/product/ 에도 복사(사이트 Product 구조화 데이터 · 아임웹 상세 그림에서 씀), docs/assets/img/og.png(1200x630)
-형제 사이트 상품 그림의 짜임(로고 · 토큰 카드 · 장점 세 칸 · 실측 예시)을 바탕으로 AiHuman 색(남색 · 파랑 · 하늘)과 궤도선으로.
-정가 표시 없이(형제 사이트 방침). 전후 AI 작성률은 _src/demo.json(AiHuman 엔진 실측값) 논문 예시 그대로.
+형제 사이트 상품 그림의 짜임(로고 · 토큰 카드 · 장점 세 칸 · 실측 예시)을 바탕으로 AIHuman 색(남색 · 파랑 · 하늘)과 궤도선으로.
+정가 표시 없이(형제 사이트 방침). 전후 AI 작성률은 _src/demo.json(AIHuman 엔진 실측값) 논문 예시 그대로.
 글꼴: _src/shop/pretendard.css(저장소에 올리지 않음, PretendardVariable.woff2 를 같은 폴더에)"""
 import asyncio, json, os, shutil
 from playwright.async_api import async_playwright
@@ -120,7 +120,7 @@ h1 em{font-style:normal;background:linear-gradient(135deg,#0a3fd1,#0b63f6 50%,#1
 
 def guide_html():
     steps = [("결제", "토큰을 고르고 성균관컨설팅 결제 페이지에서 결제합니다. 회원가입 없이 카드 · 간편결제로 끝납니다."),
-             ("메일로 코드", "결제가 확인되면 보통 1분 안에 주문서의 이메일로 16자리 토큰 코드가 갑니다. 보내는 이름은 'AiHuman'입니다."),
+             ("메일로 코드", "결제가 확인되면 보통 1분 안에 주문서의 이메일로 16자리 토큰 코드가 갑니다. 보내는 이름은 'AIHuman'입니다."),
              ("바로 이어서", "메일의 '바로 이어서 하기'를 누르면 코드가 들어간 채로 aihuman.ai.kr 이 열리고, 하던 글을 그대로 이어 갑니다."),
              ("쓴 만큼만", "글을 넣고 검사 · 휴머나이징을 누르면 글자 수만큼만 빠집니다. 남은 토큰은 기한 없이 그대로입니다.")]
     s = "".join('<div class="st"><i>%d</i><div><b>%s</b><p>%s</p></div></div>' % (i + 1, a, b) for i, (a, b) in enumerate(steps))

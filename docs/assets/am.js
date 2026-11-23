@@ -1,4 +1,4 @@
-/* AiHuman 공통 스크립트: 머리글 · 메뉴 · 복사 · 신청 양식 (2026.10) */
+/* AIHuman 공통 스크립트: 머리글 · 메뉴 · 복사 · 신청 양식 (2026.10) */
 (function () {
   'use strict';
   var AM = window.AM = window.AM || {};
@@ -69,10 +69,10 @@
     return j;
   }
   AM.tok = tokS;
-  /* AiHuman: 같은 엔진(AIMarker 서버)이 보내는 안내 · 판정 기준 이름 속 'AIMarker' 를 이 사이트 이름으로.
+  /* AIHuman: 같은 엔진(AIMarker 서버)이 보내는 안내 · 판정 기준 이름 속 'AIMarker' 를 이 사이트 이름으로.
      결제 · 충전 · 코드 응답은 전체를, 검사 · 휴머나이징 응답은 안내 칸(message · note · critName 등)만 바꿈(이용자가 넣은 글은 건드리지 않음) */
   var HZB_KEYS = { message: 1, note: 1, critName: 1, error: 1, hint: 1, why: 1, title: 1, notice: 1, label: 1, desc: 1 };
-  function hzB(v) { return typeof v === 'string' ? v.replace(/AI ?Marker|에이아이마커/g, 'AiHuman').replace(/aimarker\.kr/g, 'aihuman.ai.kr') : v; }
+  function hzB(v) { return typeof v === 'string' ? v.replace(/AI ?Marker|에이아이마커/g, 'AIHuman').replace(/aimarker\.kr/g, 'aihuman.ai.kr') : v; }
   function hzBDeep(o, d, all) {
     if (o == null || d > 6) return o;
     if (typeof o === 'string') return all ? hzB(o) : o;
@@ -188,7 +188,7 @@
           show(f, 'err', r.message);
         } else { throw new Error(r && r.message || 'fail'); }
       }).catch(function () {
-        var subj = '[AiHuman] ' + (kind === 'pilot' ? '문의 · 맞춤 견적' : kind === 'biz' ? '도입 문의' : kind === 'creator' ? '크리에이터 사전 등록' : '신청') + (d.plan ? ' · ' + d.plan : '');
+        var subj = '[AIHuman] ' + (kind === 'pilot' ? '문의 · 맞춤 견적' : kind === 'biz' ? '도입 문의' : kind === 'creator' ? '크리에이터 사전 등록' : '신청') + (d.plan ? ' · ' + d.plan : '');
         var bodyTxt = ['이름: ' + d.name, '회사 · 기관: ' + d.org, '연락처: ' + d.contact, '사이트: ' + d.site, '요금제: ' + d.plan, '구분: ' + d.type, '내용: ' + d.memo].join('\n');
         show(f, 'err', '지금 연결이 원활하지 않아요. <a href="mailto:' + AM.MAIL + '?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(bodyTxt) + '">메일로 보내기</a>를 눌러 주시면 같은 내용이 전달됩니다.');
       }).finally(function () { if (btn) { btn.disabled = false; btn.innerHTML = btn.getAttribute('data-t'); } });
