@@ -29,8 +29,8 @@ SITE = "https://aihuman.ai.kr"
 HOST = "aihuman.ai.kr"
 BRAND = "AiHuman"
 BRAND_KO = "AI휴먼"
-VER = "20261122m"
-TODAY = "2026-11-22"
+VER = "20261123a"
+TODAY = "2026-11-23"
 # AiHuman 배포(AIMarker 서버 프로젝트 버전 39, 엔진은 AIMarker 와 같음 · 2026.11.22 12:48)
 API = "https://script.google.com/macros/s/AKfycby_nRD2dpVLYztnfUlaiQfS3zOXZwfBMVewmZgecSqnONA3vVmiiIyQuZ32Ae5hcOntyg/exec"
 SHOP = "https://skkc.co.kr/shop_view?idx=%s&kaiec_buy=1"
@@ -113,9 +113,11 @@ FT_KW = [("/", "AI 휴머나이징"), ("/ai-humanizer/", "AI 휴머나이저"), 
 
 # 11.22 대표 '카피킬러 AI 작성률 낮추기 같은 검색어도 하단에 적혀 노출되게': 첫 화면 밖 쪽에는 검사기 이름 검색어 칩을 더함(첫 화면은 일반 말)
 FT_KW_HOME = [("/copykiller-ai-rate/", "표절 검사 AI 작성률 낮추기"), ("/gptkiller-ai-rate/", "GPT 탐지 낮추기"), ("/chatgpt-ai-rate/", "챗GPT 작성률 낮추기"),
-              ("/ai-rate-check/", "AI 작성률 검사"), ("/thesis-ai-rate/", "논문 AI 작성률"), ("/resume-ai-rate/", "자기소개서 AI 작성률")]
+              ("/ai-rate-check/", "AI 작성률 검사"), ("/thesis-ai-rate/", "논문 AI 작성률"), ("/resume-ai-rate/", "자기소개서 AI 작성률"),
+              ("/ai-plagiarism-rate/", "AI 표절률 낮추기"), ("/ai-detection-bypass/", "AI 탐지 우회")]
 FT_KW_SUB = [("/copykiller-ai-rate/", "카피킬러 AI 작성률 낮추기"), ("/gptkiller-ai-rate/", "GPT킬러 낮추기"), ("/chatgpt-ai-rate/", "챗GPT 작성률 낮추기"),
-             ("/ai-rate-check/", "AI 작성률 검사"), ("/thesis-ai-rate/", "논문 AI 작성률"), ("/resume-ai-rate/", "자기소개서 AI 작성률")]
+             ("/ai-rate-check/", "AI 작성률 검사"), ("/thesis-ai-rate/", "논문 AI 작성률"), ("/resume-ai-rate/", "자기소개서 AI 작성률"),
+             ("/ai-plagiarism-rate/", "AI 표절률 낮추기"), ("/ai-detection-bypass/", "AI 탐지 우회")]
 
 
 def footer(home=False):
