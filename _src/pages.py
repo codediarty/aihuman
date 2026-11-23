@@ -372,3 +372,12 @@ LANDING = [
         "related": ["ai-rate-lower", "ai-text-humanize", "ai-natural-rewrite", "ai-humanizer-compare"],
     },
 ]
+
+
+# 11.23 3차: 검색어 쪽(ai-humanizer/ · ai-humanizing/)에 고유 글(자주 하는 실수 일곱 가지)과 질문을 더함. 기존 것은 그대로
+from more_kw import LANDING_MORE as _LM  # noqa: E402
+for _L in LANDING:
+    _m = _LM.get(_L["path"])
+    if _m:
+        _L["body"] = _m["body"]
+        _L["faq"] = list(_L["faq"]) + list(_m["faq"])

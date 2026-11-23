@@ -23,13 +23,14 @@ OUT = os.path.join(ROOT, "docs")
 sys.path.insert(0, HERE)
 from icons import ICONS  # noqa: E402
 import pages as P  # noqa: E402
+import more_kw as MK  # noqa: E402
 
 # ---------------- 설정 ----------------
 SITE = "https://aihuman.ai.kr"
 HOST = "aihuman.ai.kr"
 BRAND = "AiHuman"
 BRAND_KO = "AI휴먼"
-VER = "20261123b"
+VER = "20261123c"
 TODAY = "2026-11-23"
 # AiHuman 배포(AIMarker 서버 프로젝트 버전 39, 엔진은 AIMarker 와 같음 · 2026.11.22 12:48)
 API = "https://script.google.com/macros/s/AKfycby_nRD2dpVLYztnfUlaiQfS3zOXZwfBMVewmZgecSqnONA3vVmiiIyQuZ32Ae5hcOntyg/exec"
@@ -526,6 +527,7 @@ def build_guides():
     cards = "".join('<a class="gcard rv" href="/%s"><small>%s · %s</small><h3>%s</h3><p>%s</p><span class="go">읽어 보기 →</span></a>' % (gpath(g), g["cat"], esc(g["kw"]), esc(g["h1"]), esc(g["desc"])) for g in P.GUIDES)
     body = ('<section class="ph"><div class="wrap">%s<h1 class="h1">AI 휴머나이징 가이드</h1><p class="lead">AI 작성률 낮추기, AI 탐지기 원리, 논문 · 자기소개서 AI 작성률, AI 휴머나이징 사이트 고르는 법까지 정리했습니다.</p></div></section>'
             '<section class="sec-s"><div class="wrap"><div class="gcards">%s</div></div></section>') % (crumbs_html(trail0), cards)
+    body += MK.GUIDE_HUB   # 11.23 3차: 가이드 모음 쪽만의 읽는 순서 · 쓰는 방식
     body += cta_band()
     page("guide/", "AI 휴머나이징 가이드 · AI 작성률 낮추는 법 | AiHuman(AI휴먼)", "AI 작성률 낮추기, 카피킬러 · GPT킬러 AI 작성률, 챗GPT 작성률, AI 탐지기 원리, 논문 · 자기소개서 AI 작성률, AI 휴머나이징 사이트 비교까지 정리한 가이드.",
          body, ld=[ld_crumbs(trail0), {"@type": "CollectionPage", "name": BRAND + " AI 휴머나이징 가이드", "url": SITE + "/guide/", "hasPart": [{"@type": "Article", "headline": g["h1"], "url": SITE + "/" + gpath(g)} for g in P.GUIDES]}], priority="0.8")
@@ -564,6 +566,8 @@ def build_landing():
                  '<div class="wrap" style="margin-top:26px"><div class="grid4">%s</div></div></section>') % (L["answer"], cards)
         body += ('<section class="sec alt"><div class="wrap-n"><h2 class="h2 center">%s</h2><div class="tbl-w"><table class="tbl"><thead><tr><th scope="col">기준</th><th scope="col">왜 중요한가</th><th scope="col" class="me">%s</th></tr></thead><tbody>%s</tbody></table></div></div></section>') % (
             esc(L["table_h"]), BRAND, rows)
+        if L.get("body"):   # 11.23 3차: 검색어 쪽마다 고유 글(more_kw.py)
+            body += '<section class="sec"><div class="wrap-n prose">%s</div></section>' % L["body"]
         body += example_section(h2="실제 엔진으로 잰<br>AI 휴머나이징 전과 후")
         body += price_section(alt=True)
         body += '<section class="sec"><div class="wrap-n"><h2 class="h2 center">자주 묻는 질문</h2>%s</div></section>' % faq_html(L["faq"])

@@ -228,3 +228,13 @@ for _g in GUIDES:
 
 # 첫 화면 가이드 구역에 보일 글(검사기 이름이 들어간 글은 첫 화면에 넣지 않음: 대표 방침)
 HOME_GUIDES = ["ai-rate-lower", "ai-detector", "thesis-ai-rate", "resume-ai-rate", "ai-text-humanize", "humanizer-compare"]
+
+
+# 11.23 3차: 고유 몫이 낮은 가이드 셋에 '자주 하는 실수 세 가지'와 질문 하나를 더함(고친 날짜도 새로). 기존 글은 그대로
+from more_kw import GUIDE_MORE as _GM  # noqa: E402
+for _g in GUIDES:
+    _m = _GM.get(_g["slug"])
+    if _m:
+        _g["body"] = _g["body"] + _m["body"]
+        _g["faq"] = list(_g.get("faq", [])) + list(_m["faq"])
+        _g["date"] = "2026-11-23"
