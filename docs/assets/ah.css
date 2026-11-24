@@ -600,3 +600,16 @@ html body .hz7-dlg-b .hz19-auto .ico { margin-top: 2px; padding: 2px; border-rad
 @keyframes hz38glow{0%,100%{transform:translate(0,0) scale(1);opacity:.9}50%{transform:translate(-30px,20px) scale(1.12);opacity:.6}}
 @media (max-width:560px){.hz38{padding:18px 16px 14px}.hz38-top{gap:14px;align-items:flex-start}.hz38-doc{flex-basis:86px;height:88px;padding:11px 9px}.hz38-ln{height:5px}.hz38-tag{display:none}.hz38-tx b{font-size:15.5px}.hz38-tx p{font-size:13px}.hz38-st li{font-size:11.5px;padding:4px 8px 4px 5px}}
 @media (prefers-reduced-motion:reduce){.hz38 *,.hz38::before,.hz38 *::after{animation:none!important}.hz38-ln::after{background-color:var(--ds-blue-600,#2563eb);opacity:.7}.hz38-chk .hz38-ln::after{background-color:#c9d3e3}.hz38-chk .hz38-ln.f::after{background-color:var(--ai,#e5484d)}.hz38-beam{display:none}}
+/* 2026.11.24 첫 화면 문구 전 → 후(대표): 알약 아이콘 · '저감 기술' 링크 · 두 줄 헤드라인 크기 · 성능 강조 두 줄 */
+.eb-1 b{width:22px;height:22px;padding:0;justify-content:center}
+.eb-1 b .ico{width:13px;height:13px;stroke-width:2.6}
+a.eyebrow{text-decoration:none;transition:background .15s,border-color .15s}
+a.eyebrow:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3)}
+a.eyebrow:focus-visible{outline:2px solid #7fdcff;outline-offset:2px}
+.hero .h1{font-size:clamp(31px,3.95vw,52px);line-height:1.17}
+.hero .h1 .kw{font-size:.44em;margin-bottom:14px}
+.hero-proof .hp-t{display:flex;flex-direction:column;gap:3px;min-width:0}
+.hero-proof .hp-t b{font-size:14.5px;letter-spacing:-.01em}
+.hero-proof .hp-t small{font-size:12.5px;color:#9fb2d6;line-height:1.5}
+@media (max-width:520px){.hero-proof{align-items:flex-start}.hero-proof .hp-t b{font-size:14px}}
+.dm b em{letter-spacing:0;white-space:nowrap}

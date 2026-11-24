@@ -30,7 +30,7 @@ SITE = "https://aihuman.ai.kr"
 HOST = "aihuman.ai.kr"
 BRAND = "AIHuman"
 BRAND_KO = "AI휴먼"
-VER = "20261124c"
+VER = "20261124d"
 TODAY = "2026-11-24"
 # AIHuman 배포(AIMarker 서버 프로젝트 버전 39, 엔진은 AIMarker 와 같음 · 2026.11.22 12:48)
 API = "https://script.google.com/macros/s/AKfycby_nRD2dpVLYztnfUlaiQfS3zOXZwfBMVewmZgecSqnONA3vVmiiIyQuZ32Ae5hcOntyg/exec"
@@ -293,6 +293,14 @@ def _sent_ops(src, dst):
     return per
 
 
+BAND_LABEL = {"부적합": "AI 작성률 높음"}   # 2026.11.24 대표: '부적합'은 공식 제출 기준이 있는 것처럼 보일 수 있어 예시 화면에서는 'AI 작성률 높음'. 엔진 원값(demo.json)은 그대로
+DEMO_MEASURED = "AIHuman HUM 2.5 엔진 적용 결과입니다. 문서의 특성과 AI 작성 패턴에 따라 감소율은 달라질 수 있으며, 반복 휴머나이징을 통해 추가적인 개선을 시도할 수 있습니다."   # 2026.11.24 대표 전 → 후(예전 문구는 demo.json measured 에 그대로)
+
+
+def _band(b):
+    return BAND_LABEL.get(b, b)
+
+
 def demo_samples():
     out = []
     for S in DEMO["samples"]:
@@ -314,7 +322,8 @@ def demo_samples():
             anim.append('<span class="s%s">%s%s</span> ' % (" ai" if isai else "", A_.rstrip(), tag))
             src.append('<span class="s%s">%s%s</span> ' % (" ai" if isai else "", S_.rstrip(), tag.replace("demo-tag", "demo-tag st")))
             dst.append('<span class="s%s">%s%s</span> ' % (" hu" if n else "", D_.rstrip(), okt))
-        out.append({"k": S["k"], "label": S["label"], "file": S["file"], "before": S["before"], "after": S["after"], "changes": nch,
+        bf, af = dict(S["before"], band=_band(S["before"]["band"])), dict(S["after"], band=_band(S["after"]["band"]))
+        out.append({"k": S["k"], "label": S["label"], "file": S["file"], "before": bf, "after": af, "changes": nch,
                     "doc": '<p class="ai-blk">' + "".join(anim).strip() + "</p>",
                     "src": '<p class="ai-blk">' + "".join(src).strip() + "</p>", "dst": '<p class="hu-blk">' + "".join(dst).strip() + "</p>"})
     return out
@@ -324,7 +333,7 @@ SAMPLES = demo_samples()
 
 
 def demo_json():
-    return '<script type="application/json" id="hzDemoData">%s</script>' % json.dumps({"samples": SAMPLES, "measured": DEMO["measured"]}, ensure_ascii=False).replace("</", "<\\/")
+    return '<script type="application/json" id="hzDemoData">%s</script>' % json.dumps({"samples": SAMPLES, "measured": DEMO_MEASURED}, ensure_ascii=False).replace("</", "<\\/")
 
 
 def demo_card():
@@ -334,15 +343,15 @@ def demo_card():
     return ('<div class="demo" id="demo" aria-label="AI 작성률 검사와 휴머나이징 예시(실제 엔진 값)">'
             '<div class="demo-bar"><i></i><i></i><i></i><span class="fn">%s<span>%s</span></span><div class="demo-tabs" role="tablist" aria-label="예시 글 종류">%s</div></div>'
             '<div class="demo-scan" aria-hidden="true"></div>'
-            '<div class="demo-meter"><div class="dm from bad"><small>휴머나이징 전 · AI 작성률</small><b>%s<small style="font-size:18px">%%</small> <em>%s</em></b><div class="dm-bar"><i style="width:%s%%"></i></div></div>'
+            '<div class="demo-meter"><div class="dm from bad"><small>휴머나이징 전 AI 작성률</small><b>%s<small style="font-size:18px">%%</small> <em>%s</em></b><div class="dm-bar"><i style="width:%s%%"></i></div></div>'
             '<span class="dm-arr" aria-hidden="true">%s</span>'
-            '<div class="dm to good wait"><small>휴머나이징 후 · AI 작성률</small><b>– <em>대기</em></b><div class="dm-bar"><i style="width:0"></i></div></div></div>'
-            '<div class="demo-legend"><span class="a"><i></i>AI 패턴 검출 문장</span><span class="h"><i></i>사람 문장으로 바꾼 곳</span><span class="demo-state" aria-live="polite"></span></div>'
+            '<div class="dm to good wait"><small>휴머나이징 후 AI 작성률</small><b>– <em>대기</em></b><div class="dm-bar"><i style="width:0"></i></div></div></div>'
+            '<div class="demo-legend"><span class="a"><i></i>AI 패턴 감지 문장</span><span class="h"><i></i>AI 패턴 개선 문장</span><span class="demo-state" aria-live="polite"></span></div>'
             '<div class="demo-doc">%s</div>'
-            '<div class="demo-ft"><a class="btn btn-p btn-s demo-go" href="#tool" data-hum-go>%s<span>휴머나이징 하기</span><em>내 글 인간화</em></a>'
-            '<a class="btn btn-g btn-s" href="#tool" data-tool>무료 검사</a><p class="note">%s</p></div></div>') % (
+            '<div class="demo-ft"><a class="btn btn-p btn-s demo-go" href="#tool" data-hum-go>%s<span>AI 작성률 낮추기</span></a>'
+            '<a class="btn btn-g btn-s" href="#tool" data-tool>무료 AI 작성률 검사</a><p class="note">%s</p></div></div>') % (
         ico("file"), esc(first["file"]), tabs, first["before"]["rate"], first["before"]["band"], first["before"]["rate"], ico("arrow"),
-        first["doc"], ico("sparkle"), esc(DEMO["measured"]))
+        first["doc"], ico("trend_down"), esc(DEMO_MEASURED))
 
 
 def compare_block():
@@ -351,7 +360,7 @@ def compare_block():
     return ('<div class="cmp-tabs" role="tablist" aria-label="예시 글 종류">%s</div><div class="cmp" id="cmp">'
             '<div class="cmp-col"><div class="cmp-h"><span>휴머나이징 전</span><span class="pill l bad"></span></div><div class="cmp-t l"></div></div>'
             '<div class="cmp-col"><div class="cmp-h"><span>휴머나이징 후</span><span class="pill r good"></span></div><div class="cmp-t r"></div></div></div>'
-            '<div class="cmp-foot"></div><p class="center measured">%s</p>') % (tabs, esc(DEMO["measured"]))
+            '<div class="cmp-foot"></div><p class="center measured">%s</p>') % (tabs, esc(DEMO_MEASURED))
 
 
 def faq_html(faq):
@@ -417,9 +426,11 @@ def crumbs_html(trail):
 
 
 def proof_line():
+    """2026.11.24 대표 전 → 후: 92% → 7% / 한 번의 휴머나이징으로 AI 작성률 85%p 감소 / 자체 엔진 측정 사례이며 문서에 따라 결과는 달라질 수 있습니다.
+    (예전: '논문 예시, 한 번의 휴머나이징 · 실제 엔진으로 잰 값입니다. 글마다 결과는 다릅니다.') 숫자는 첫 예시(demo.json 논문) 그대로, 차이는 빼서 셈"""
     S = SAMPLES[0]
-    return ('<p class="hero-proof"><span class="hp-n"><s>%d%%</s><i>→</i><em>%d%%</em></span><span><b>%s 예시, 한 번의 휴머나이징</b> · 실제 엔진으로 잰 값입니다. 글마다 결과는 다릅니다.</span></p>' % (
-        S["before"]["rate"], S["after"]["rate"], esc(S["label"])))
+    a, b = S["before"]["rate"], S["after"]["rate"]
+    return ('<p class="hero-proof"><span class="hp-n"><s>%d%%</s><i>→</i><em>%d%%</em></span><span class="hp-t"><b>한 번의 휴머나이징으로 AI 작성률 %d%%p 감소</b><small>자체 엔진 측정 사례이며 문서에 따라 결과는 달라질 수 있습니다.</small></span></p>' % (a, b, a - b))
 
 
 ORBIT = ('<svg class="orbit" viewBox="0 0 980 760" aria-hidden="true" focusable="false"><defs>'
@@ -431,18 +442,27 @@ ORBIT = ('<svg class="orbit" viewBox="0 0 980 760" aria-hidden="true" focusable=
          '<circle class="spark" cx="690" cy="262" r="26" fill="url(#og3)"/></svg>')
 
 
+TECH_PAGE = False   # build_tech() 가 /technology/ 를 만들면 True(첫 화면 '저감 기술' 알약이 그 쪽 링크가 됨)
+
+
+def eb2_html():
+    if TECH_PAGE:
+        return '<a class="eyebrow eb-2" href="/technology/"><b>%s</b>AI 작성률 저감 기술</a>' % ico("trend_down")
+    return '<p class="eyebrow eb-2"><b>%s</b>AI 작성률 저감 기술</p>' % ico("trend_down")
+
+
 def hero(eyebrow, h1, lead, pts=None):
     """첫 화면: 어두운 바탕(궤도선) 왼쪽 글(알약 · 제목 · 설명 · 파일 상자 · 장점 · 실측 한 줄) + 오른쪽 실제 엔진 예시.
     검사 도구는 바로 아래 떠 있는 흰 판(tool_section). 좁은 화면은 예시를 도구 아래로 옮김(site.js)"""
-    pts = pts or ["한국어 전용 엔진", "문장 단위 AI 작성률", "한글 · 워드 · PDF 그대로"]
+    pts = pts or ["한국어 특화 엔진", "문장 단위 AI 패턴 분석", "HWP · Word · PDF 지원"]   # 2026.11.24 대표 전 → 후(예전: 한국어 전용 엔진 · 문장 단위 AI 작성률 · 한글 · 워드 · PDF 그대로)
     return ('<section class="hero" id="top">%s<div class="wrap"><div class="hero-grid">'
-            '<div class="hero-copy"><div class="eb-row"><p class="eyebrow">%s</p><p class="eyebrow eb-2"><b>%s</b>AI 작성률 낮추기</p></div><h1 class="h1">%s</h1><p class="lead">%s</p>'
-            '<div class="hero-up" data-hero-drop><div class="hu-h"><span class="hu-ic">%s</span><p><b>파일을 올리면 AI 작성률을 바로 검사합니다</b><span>한글(HWP · HWPX) · 워드(DOCX) · PDF · 텍스트, 끌어다 놓아도 됩니다</span></p></div>'
-            '<div class="hu-b"><button class="btn btn-p" type="button" data-hero-pick>%s파일 올리기</button><a class="btn btn-g" href="#tool" data-tool>%s글 붙여 넣기</a></div></div>'
+            '<div class="hero-copy"><div class="eb-row"><p class="eyebrow eb-1"><b>%s</b>%s</p>%s</div><h1 class="h1">%s</h1><p class="lead">%s</p>'
+            '<div class="hero-up" data-hero-drop><div class="hu-h"><span class="hu-ic">%s</span><p><b>파일 업로드 한 번으로 AI 작성률 확인</b><span>한글(HWP · HWPX) · 워드(DOCX) · PDF · 텍스트, 끌어다 놓아도 됩니다</span></p></div>'
+            '<div class="hu-b"><button class="btn btn-p" type="button" data-hero-pick>%s파일 업로드</button><a class="btn btn-g" href="#tool" data-tool>%s텍스트 입력</a></div></div>'
             '<ul class="hero-pts">%s</ul>%s</div>'
             '<div class="hero-demo" id="heroDemo">%s</div>'
             '</div></div></section>') % (
-        ORBIT, eyebrow, ico("trend_down"), h1, lead, ico("upload"), ico("upload"), ico("pen"), "".join("<li>%s%s</li>" % (ico("check"), t) for t in pts), proof_line(), demo_card())
+        ORBIT, ico("check"), eyebrow, eb2_html(), h1, lead, ico("upload"), ico("upload"), ico("pen"), "".join("<li>%s%s</li>" % (ico("check"), t) for t in pts), proof_line(), demo_card())
 
 
 def tool_section(flat=False):
@@ -455,7 +475,7 @@ def tool_section(flat=False):
 
 def example_section(h2="AI 휴머나이징 전과 후,<br>실제 엔진으로 잰 결과", alt=False):
     return ('<section class="sec%s" id="example"><div class="wrap"><div class="center"><p class="kick">%s실제 측정 결과</p><h2 class="h2">%s</h2>'
-            '<p class="sub">아래 예시는 %s 엔진에 그대로 넣어 잰 실제 값입니다. 보라색은 AI 패턴이 검출된 문장, 초록색은 사람 문장으로 바꾼 곳입니다.</p></div>%s</div></section>') % (
+            '<p class="sub">아래 예시는 %s 엔진에 그대로 넣어 잰 실제 값입니다. 보라색은 AI 패턴이 감지된 문장, 초록색은 AI 패턴을 개선한 문장입니다.</p></div>%s</div></section>') % (
         " alt" if alt else "", ico("eye"), h2, BRAND, compare_block())
 
 
