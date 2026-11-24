@@ -660,3 +660,6 @@ a.eyebrow:focus-visible{outline:2px solid #7fdcff;outline-offset:2px}
 @media (max-width:560px){.tk-flow{grid-template-columns:minmax(0,1fr)}.dd-in{grid-template-columns:minmax(0,1fr)}}
 @media (min-width:1361px){.hd>.wrap{width:min(1400px,100% - 48px);max-width:none}}
 .nav a,.dd-b{white-space:nowrap}.nav>.dd{display:flex;align-items:center}
+
+/* 2026.11.25 대표: 요금 칸은 칸 어디를 눌러도 충전으로(site.js) */
+.pk:has(a.btn[data-pack]){cursor:pointer}
