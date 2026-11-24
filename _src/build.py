@@ -32,7 +32,7 @@ SITE = "https://aihuman.ai.kr"
 HOST = "aihuman.ai.kr"
 BRAND = "AIHuman"
 BRAND_KO = "AI휴먼"
-VER = "20261124d"
+VER = "20261124e"
 TODAY = "2026-11-24"
 # AIHuman 배포(AIMarker 서버 프로젝트 버전 39, 엔진은 AIMarker 와 같음 · 2026.11.22 12:48)
 API = "https://script.google.com/macros/s/AKfycby_nRD2dpVLYztnfUlaiQfS3zOXZwfBMVewmZgecSqnONA3vVmiiIyQuZ32Ae5hcOntyg/exec"
@@ -40,6 +40,7 @@ SHOP = "https://skkc.co.kr/shop_view?idx=%s&kaiec_buy=1"
 # 성균관컨설팅(아임웹) AIHuman 전용 상품 번호. 서버는 스크립트 속성 AH_IDX 로 같은 번호를 ah1~ah4 로 봄
 SHOP_IDX = {"lt": "166", "pl": "167", "pr": "168", "mx": "169"}   # 2026.11.22 등록(166 라이트 · 167 플러스 · 168 프로 · 169 맥스)
 NAVER_VERIFY = "1686e779481bfe2661d8976c449366c443772467"   # 네이버 서치어드바이저 HTML 태그(대표, 2026.11.22 13:57)
+NAVER_VERIFY2 = "b597b2039d80d7522426710a7f2292c2eb6a120e"   # 2026.11.24 22:13 대표 네이버 서치어드바이저 계정에 새로 등록한 소유확인(HTML 태그). 예전 값도 그대로 둠
 GOOGLE_VERIFY = ""
 BING_VERIFY = "6CFE39150A28BBBB4694B507E2E689C0"   # 11.22 Bing 웹마스터 도구(형제 사이트와 같은 계정의 메타 태그)
 INDEXNOW_KEY = "7c3e9a51d2b84f06a1e5c8d94b2f6a07"
@@ -219,6 +220,8 @@ def page(path, title, desc, body, *, ld=None, tool=False, og=None, ptype="websit
             '<link rel="alternate" type="application/rss+xml" title="%s 가이드" href="/rss.xml">' % BRAND]
     if NAVER_VERIFY:
         head.append('<meta name="naver-site-verification" content="%s">' % NAVER_VERIFY)
+    if NAVER_VERIFY2:
+        head.append('<meta name="naver-site-verification" content="%s">' % NAVER_VERIFY2)
     if GOOGLE_VERIFY:
         head.append('<meta name="google-site-verification" content="%s">' % GOOGLE_VERIFY)
     if BING_VERIFY:
