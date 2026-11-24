@@ -24,6 +24,8 @@ sys.path.insert(0, HERE)
 from icons import ICONS  # noqa: E402
 import pages as P  # noqa: E402
 import more_kw as MK  # noqa: E402
+import new_pages as NP  # noqa: E402
+P.GUIDES.extend(NP.GUIDES_NEW)   # 2026.11.24 새 가이드 네 편(검색어 주소 맨 위)
 
 # ---------------- 설정 ----------------
 SITE = "https://aihuman.ai.kr"
@@ -76,16 +78,36 @@ LOGO = '<a class="logo" href="/" aria-label="%s(%s) 홈"><img src="/assets/img/l
 LOGO_W = '<a class="logo" href="/" aria-label="%s(%s) 홈"><img src="/assets/img/logo-w.png?v=%s" width="542" height="120" alt="%s"></a>' % (BRAND, BRAND_KO, VER, BRAND)
 
 # 메뉴: 형제 사이트에서 대표가 정한 대로 'AI 휴머나이저(AI 작성률 낮추기)' 하나가 첫 칸(헷갈리지 않고 결제로). 검사기 이름은 메뉴에 쓰지 않음
-NAV = [("", "AI 작성률 낮추기"), ("pricing/", "요금"), ("guide/", "가이드"), ("faq/", "자주 묻는 질문")]   # 2026.11.23 21:42 대표(한국휴머나이저 · 카피휴먼과 같게): 'AI 휴머나이저(AI 작성률 낮추기)' → 'AI 작성률 낮추기'
+NAV_OLD = [("", "AI 작성률 낮추기"), ("pricing/", "요금"), ("guide/", "가이드"), ("faq/", "자주 묻는 질문")]   # 2026.11.23 21:42 대표(한국휴머나이저 · 카피휴먼과 같게): 'AI 휴머나이저(AI 작성률 낮추기)' → 'AI 작성률 낮추기'
+NAV = [("", "AI 작성률 낮추기"), ("ai-humanizing/", "AI 휴머나이징"), ("ai-rate-check/", "AI 작성률 검사"), ("technology/", "휴머나이징 기술"), ("@menu", "상황별 안내"),
+       ("pricing/", "요금"), ("guide/", "가이드"), ("faq/", "자주 묻는 질문")]   # 2026.11.24 20:33 대표 '상단 페이지에 AI 작성률 낮추기 말고도 … 더 페이지를 만들어서(휴머나이징 등) 노출을'
+
+
+def menu_links(path, mobile=False):
+    """'상황별 안내' 펼침 칸. 첫 화면(path == "")에는 검사기 이름 대신 일반 말(첫 화면 방침)"""
+    out = []
+    for h, items in NP.MENU_GROUPS:
+        links = "".join('<a href="/%s"%s>%s</a>' % (u, ' aria-current="page"' if path == u else "", (t if (path == "" or not t2) else t2)) for u, t, t2 in items)
+        out.append('<div class="dd-g"><b>%s</b>%s</div>' % (h, links))
+    return "".join(out)
 
 
 def header(path):
-    nav = "".join('<a href="/%s"%s>%s</a>' % (p, ' aria-current="page"' if path == p else "", t) for p, t in NAV)
-    mnav = "".join('<a href="/%s">%s</a>' % (p, t) for p, t in NAV)
+    in_menu = any(path == u for _, items in NP.MENU_GROUPS for u, _t, _t2 in items)
+    parts = []
+    for p, t in NAV:
+        if p == "@menu":
+            parts.append('<div class="dd%s" data-dd><button class="dd-b" type="button" aria-expanded="false" aria-controls="ddMenu"%s>%s%s</button>'
+                         '<div class="dd-m" id="ddMenu"><div class="dd-in">%s</div></div></div>' % (" cur" if in_menu else "", ' aria-current="true"' if in_menu else "", t, ico("chev", "ico dd-i"), menu_links(path)))
+        else:
+            parts.append('<a href="/%s"%s>%s</a>' % (p, ' aria-current="page"' if path == p else "", t))
+    nav = "".join(parts)
+    mnav = "".join('<a href="/%s">%s</a>' % (p, t) for p, t in NAV if p != "@menu")
+    mnav += '<details class="m-dd"><summary>상황별 안내%s</summary><div class="m-dd-in">%s</div></details>' % (ico("chev", "ico dd-i"), menu_links(path, True))
     top = ('<div class="topbar"><div class="wrap"><span class="dot" aria-hidden="true"></span><span><b>AI 작성률 검사 무료</b> · 가입 없이 20만 자<span class="hide-s"> · 한글 · 워드 · PDF 그대로</span></span>'
            '<a href="/#tool" data-tool>지금 검사하기 →</a></div></div>')
     return (top + '<header class="hd" id="hd"><div class="wrap hd-in">%s<nav class="nav" aria-label="주요 메뉴">%s</nav>'
-            '<div class="hd-r"><a class="btn btn-g btn-s" href="/pricing/">토큰 충전</a><a class="btn btn-p btn-s" href="/#tool" data-tool>%s<span class="hl">무료 AI 작성률 검사</span><span class="hs">무료 검사</span></a>'
+            '<div class="hd-r"><a class="btn btn-g btn-s hd-tk" href="/pricing/">토큰 충전</a><a class="btn btn-p btn-s" href="/#tool" data-tool>%s<span class="hl">무료 AI 작성률 검사</span><span class="hs">무료 검사</span></a>'
             '<button class="menu-btn" id="menuBtn" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mnav">%s</button></div></div></header>'
             '<nav class="mnav" id="mnav" aria-label="모바일 메뉴">%s<a href="/#tool" data-tool>무료 AI 작성률 검사</a><a href="/#example">실제 측정 결과</a><a href="/about/">회사 소개</a></nav>') % (LOGO, nav, ico("search"), ico("menu"), mnav)
 
@@ -109,7 +131,8 @@ def guide_at(new):
 
 # 바닥글 검색어 링크(검색어 = 그 글의 주제, 첫 화면 방침대로 검사기 이름 글은 넣지 않음)
 FT_KW = [("/", "AI 휴머나이징"), ("/ai-humanizer/", "AI 휴머나이저"), ("/ai-rate-lower/", "AI 작성률 낮추기"), ("/ai-text-humanize/", "AI 글 인간화"),
-         ("/korean-humanizer/", "한국어 휴머나이저"), ("/ai-sentence-converter/", "AI 문장 변환기"), ("/ai-detector/", "AI 탐지기"), ("/ai-humanizing/", "AI 휴머나이징이란"), ("/pricing/", "AI 휴머나이징 가격")]
+         ("/korean-humanizer/", "한국어 휴머나이저"), ("/ai-sentence-converter/", "AI 문장 변환기"), ("/ai-detector/", "AI 탐지기"), ("/ai-humanizing/", "AI 휴머나이징이란"), ("/pricing/", "AI 휴머나이징 가격"),
+         ("/technology/", "AI 작성률 저감 기술"), ("/ai-rate-meaning/", "AI 작성률이란"), ("/report-ai-rate/", "레포트 AI 작성률"), ("/blog-ai-rate/", "블로그 AI 티 줄이기"), ("/ai-rate-prompt/", "AI 작성률 낮추는 프롬프트")]   # 2026.11.24 새 쪽
 
 
 # 11.22 대표 '카피킬러 AI 작성률 낮추기 같은 검색어도 하단에 적혀 노출되게': 첫 화면 밖 쪽에는 검사기 이름 검색어 칩을 더함(첫 화면은 일반 말)
@@ -442,7 +465,7 @@ ORBIT = ('<svg class="orbit" viewBox="0 0 980 760" aria-hidden="true" focusable=
          '<circle class="spark" cx="690" cy="262" r="26" fill="url(#og3)"/></svg>')
 
 
-TECH_PAGE = False   # build_tech() 가 /technology/ 를 만들면 True(첫 화면 '저감 기술' 알약이 그 쪽 링크가 됨)
+TECH_PAGE = True   # 2026.11.24 build_tech() 가 /technology/ 를 만듦(첫 화면 '저감 기술' 알약이 그 쪽 링크)
 
 
 def eb2_html():
@@ -600,6 +623,32 @@ def build_landing():
         page(L["path"], L["title"], L["desc"], body, ld=ld, tool=True, priority="0.9", keywords=L["keywords"])
 
 
+def build_tech():
+    """2026.11.24 /technology/ AI 작성률 저감 기술(첫 화면 '저감 기술' 알약 · 위 메뉴 '휴머나이징 기술')"""
+    T = NP.TECH
+    trail = [("휴머나이징 기술", T["path"])]
+    steps = "".join('<li class="tk-st rv"><span class="tk-n">%d</span><span class="ic">%s</span><h3>%s</h3><p>%s</p></li>' % (i + 1, ico(ic), esc(h), esc(t)) for i, (ic, h, t) in enumerate(T["steps"]))
+    rows = "".join('<tr><th scope="row">%s</th><td>%s</td><td>%s</td></tr>' % (esc(a), esc(b), esc(c)) for a, b, c in T["patterns"])
+    cases = "".join('<tr><th scope="row">%s</th><td>%d%%</td><td>%d%%</td><td class="dn">%d%%p 감소</td></tr>' % (esc(S["label"]), S["before"]["rate"], S["after"]["rate"], S["before"]["rate"] - S["after"]["rate"]) for S in SAMPLES)
+    body = ('<section class="ph tk-ph"><div class="wrap">%s<p class="kick">%s</p><h1 class="h1">%s</h1><p class="lead">%s</p>'
+            '<p class="tk-cta"><a class="btn btn-p" href="/#tool" data-tool>%s무료로 AI 작성률 검사</a><a class="btn btn-g" href="/#example">휴머나이징 전후 보기</a></p></div></section>') % (
+        crumbs_html(trail), esc(T["kick"]), T["h1"], esc(T["lead"]), ico("search"))
+    body += ('<section class="sec-s"><div class="wrap"><h2 class="h2 center">한눈에 보는 4단계</h2><ol class="tk-flow">%s</ol></div></section>') % steps
+    body += ('<section class="sec alt"><div class="wrap-n"><h2 class="h2 center">무엇을 지우나요: AI 문장 패턴 다섯 가지</h2><div class="tbl-w"><table class="tbl"><thead><tr><th scope="col">패턴</th><th scope="col">예</th><th scope="col" class="me">처리 방식</th></tr></thead><tbody>%s</tbody></table></div></div></section>') % rows
+    body += ('<section class="sec"><div class="wrap-n prose"><h2 id="why">생성 AI로 다시 쓰지 않는 까닭</h2>%s<h2 id="keep">원문의 의미를 지키는 장치</h2><ul>%s</ul>'
+             '<h2 id="case">자체 엔진 측정 사례</h2><div class="tbl-w"><table class="tbl tk-case"><thead><tr><th scope="col">글 종류</th><th scope="col">휴머나이징 전</th><th scope="col">휴머나이징 후</th><th scope="col">AI 작성률 변화</th></tr></thead><tbody>%s</tbody></table></div>'
+             '<p class="meta">2026.11.22 AIHuman HUM 2.5 엔진, 한 번의 휴머나이징. 자체 엔진 측정 사례이며 문서에 따라 결과는 달라질 수 있습니다.</p>'
+             '<h2 id="data">넣은 글은 저장하지 않습니다</h2>%s<h2 id="note">알아 둘 점</h2><ul>%s</ul></div></section>') % (
+        T["why"], "".join("<li>%s</li>" % esc(x) for x in T["keep"]), cases, T["data"], "".join("<li>%s</li>" % esc(x) for x in T["note"]))
+    body += '<section class="sec alt"><div class="wrap-n"><h2 class="h2 center">자주 묻는 질문</h2>%s</div></section>' % faq_html(T["faq"])
+    body += cta_band("원리는 같고, 결과는 내 글로 확인하세요", "가입 없이 무료로 AI 작성률을 검사하고, 걸린 문장만 휴머나이징하면 됩니다.")
+    art = {"@type": "TechArticle", "headline": "AI 작성률 저감 기술, 이렇게 작동합니다", "description": T["desc"], "inLanguage": "ko-KR", "datePublished": NP.DATE, "dateModified": NP.DATE,
+           "keywords": T["keywords"], "author": {"@type": "Organization", "name": BRAND + " 편집팀", "url": SITE + "/about/"}, "publisher": {"@id": SITE + "/#org"},
+           "about": {"@id": SITE + "/#app"}, "mainEntityOfPage": SITE + "/" + T["path"], "image": [SITE + "/assets/img/og.png"]}
+    ld = [art, ld_howto("AI 작성률 저감 4단계(%s)" % BRAND, [(h, t) for _, h, t in T["steps"]]), ld_faq(T["faq"]), ld_crumbs(trail)]
+    page(T["path"], T["title"], T["desc"], body, ld=ld, ptype="article", priority="0.9", keywords=T["keywords"])
+
+
 def build_static():
     for S in P.STATIC:
         trail = [(S["crumb"], S["path"])]
@@ -702,6 +751,7 @@ if __name__ == "__main__":
     build_redirects()
     build_landing()
     build_guides()
+    build_tech()
     build_static()
     build_seo()
     problems = verify()

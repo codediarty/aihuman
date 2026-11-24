@@ -180,4 +180,15 @@
     }
     window.addEventListener('scroll', function () { mc.classList.toggle('on', seen && window.scrollY > 500); }, { passive: true });
   }
+
+  /* 2026.11.24 위 메뉴 '상황별 안내' 펼침: 누르면 열고 닫기, 바깥을 누르거나 Esc 면 닫기(넓은 화면은 마우스를 올려도 열림, CSS) */
+  (function () {
+    var dd = $('[data-dd]'); if (!dd || window.AM) return;   // 검사 도구가 있는 쪽은 am.js 가 같은 펼침(.nav .dd)을 이미 다룸(두 번 바뀌지 않게)
+    var b = $('.dd-b', dd);
+    function set(on) { dd.classList.toggle('open', on); b.setAttribute('aria-expanded', on ? 'true' : 'false'); }
+    b.addEventListener('click', function (e) { e.preventDefault(); set(!dd.classList.contains('open')); });
+    document.addEventListener('click', function (e) { if (!dd.contains(e.target)) set(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && dd.classList.contains('open')) { set(false); b.focus(); } });
+    dd.addEventListener('mouseleave', function () { if (dd.classList.contains('open') && !dd.contains(document.activeElement)) set(false); });
+  })();
 })();
