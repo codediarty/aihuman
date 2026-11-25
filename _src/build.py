@@ -32,7 +32,7 @@ SITE = "https://aihuman.ai.kr"
 HOST = "aihuman.ai.kr"
 BRAND = "AIHuman"
 BRAND_KO = "AI휴먼"
-VER = "20261125d"
+VER = "20261125f"
 TODAY = "2026-11-24"
 # AIHuman 배포(AIMarker 서버 프로젝트 버전 39, 엔진은 AIMarker 와 같음 · 2026.11.22 12:48)
 API = "https://script.google.com/macros/s/AKfycby_nRD2dpVLYztnfUlaiQfS3zOXZwfBMVewmZgecSqnONA3vVmiiIyQuZ32Ae5hcOntyg/exec"
@@ -421,8 +421,11 @@ def pricing_cards(cta_text="충전하기"):
         cls = "pk" + (" best" if p.get("best") else (" top" if p.get("top") else ""))
         tag = '<span class="tg">%s</span>' % p["best"] if p.get("best") else ('<span class="tg top">%s</span>' % p["top"] if p.get("top") else "")
         link, bcls, label = shop(p["id"]), ("btn-p" if p.get("best") else "btn-g"), "%s %s" % (p["name"], cta_text)
-        btn = ('<a class="btn %s" href="%s" target="_blank" rel="noopener" data-pack="%s">%s</a>' % (bcls, esc(link), p["id"], label)) if link else \
-              ('<a class="btn %s" href="/#buy-%s" data-buy-pack="%s">%s</a>' % (bcls, p["id"], p["id"], label))
+        # 2026.11.25 18:21 대표 'AIMarker · 카피휴먼처럼 누르면 다시 고르는 충전 창(성균관컨설팅 운영 · 안전결제 안내)을 먼저': 충전 창으로.
+        # 도구가 있는 쪽은 humanize.js [data-buy] 가 그 자리에서 창, 요금 쪽 등은 첫 화면 #buy-칸 으로 가서 창. 예전(바로 결제 페이지 새 창) 줄은 아래 주석
+        # btn = ('<a class="btn %s" href="%s" target="_blank" rel="noopener" data-pack="%s">%s</a>' % (bcls, esc(link), p["id"], label)) if link else \
+        # ('<a class="btn %s" href="/#buy-%s" data-buy-pack="%s">%s</a>' % (bcls, p["id"], p["id"], label))
+        btn = '<a class="btn %s" href="/#buy-%s" data-buy="%s" data-pack="%s">%s</a>' % (bcls, p["id"], p["id"], p["id"], label)
         sv = save_badge(p)
         out.append('<div class="%s rv">%s<h3>%s</h3><p class="who">%s</p><p class="tk2"><b>%s</b>토큰</p><p class="pr2"><b>%s</b>%s<span>토큰당 %s · 부가세 포함</span></p>%s'
                    '<p class="use">%s 검사와 휴머나이징 서비스 <b>%s</b></p>%s</div>' % (
