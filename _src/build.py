@@ -32,7 +32,7 @@ SITE = "https://aihuman.ai.kr"
 HOST = "aihuman.ai.kr"
 BRAND = "AIHuman"
 BRAND_KO = "AI휴먼"
-VER = "20261125b"
+VER = "20261125c"
 TODAY = "2026-11-24"
 # AIHuman 배포(AIMarker 서버 프로젝트 버전 39, 엔진은 AIMarker 와 같음 · 2026.11.22 12:48)
 API = "https://script.google.com/macros/s/AKfycby_nRD2dpVLYztnfUlaiQfS3zOXZwfBMVewmZgecSqnONA3vVmiiIyQuZ32Ae5hcOntyg/exec"
@@ -46,7 +46,7 @@ BING_VERIFY = "6CFE39150A28BBBB4694B507E2E689C0"   # 11.22 Bing 웹마스터 도
 INDEXNOW_KEY = "7c3e9a51d2b84f06a1e5c8d94b2f6a07"
 GOOGLE_FILES = ["google67694027f26c117c.html"]   # 11.22 구글 서치 콘솔 URL 접두어 확인용(moistener22, 도메인 속성은 가비아 TXT). 지우지 말 것
 BIZ = {"name": "성균관컨설팅", "ceo": "이채연", "no": "272-32-01885", "ecom": "제2026-경기송탄-0622",
-       "addr": "경기도 수원시 장안구 서부로 2066 성균관대학교 브릿지팩토리(연구실)", "mail": "contact@skkc.co.kr"}
+       "addr": "경기도 수원시 장안구 서부로 2066 성균관대학교 브릿지팩토리(연구실)", "mail": "token@aihuman.ai.kr"}
 # 가격 · 토큰은 AIMarker 개인 토큰 · 형제 사이트와 같음(서버 ah1~ah4). 요금 카드는 정가 없이 간단하게(형제 사이트 방침과 같게)
 PACKS = [
     {"id": "lt", "name": "라이트", "tok": 100, "price": 9900, "per": "99원", "who": "자기소개서 · 짧은 과제", "chars": "약 16,600자", "pg": "약 10페이지", "sub": "AI 작성률 낮추기, 미니멀하게", "doc": "레포트"},
