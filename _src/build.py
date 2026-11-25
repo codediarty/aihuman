@@ -26,6 +26,8 @@ import pages as P  # noqa: E402
 import more_kw as MK  # noqa: E402
 import new_pages as NP  # noqa: E402
 P.GUIDES.extend(NP.GUIDES_NEW)   # 2026.11.24 새 가이드 네 편(검색어 주소 맨 위)
+import kw1125 as KW  # noqa: E402
+P.GUIDES.extend(KW.GUIDES)   # 2026.11.25 대표 '기존 쪽과 겹치지 않으면서 노출될 만한 키워드'(턴잇인 AI 검사 · GPTZero 한국어)
 
 # ---------------- 설정 ----------------
 SITE = "https://aihuman.ai.kr"
@@ -142,7 +144,7 @@ FT_KW_HOME = [("/copykiller-ai-rate/", "표절 검사 AI 작성률 낮추기"), 
               ("/ai-plagiarism-rate/", "AI 표절률 낮추기"), ("/ai-detection-bypass/", "AI 탐지 우회")]
 FT_KW_SUB = [("/copykiller-ai-rate/", "카피킬러 AI 작성률 낮추기"), ("/gptkiller-ai-rate/", "GPT킬러 낮추기"), ("/chatgpt-ai-rate/", "챗GPT 작성률 낮추기"),
              ("/ai-rate-check/", "AI 작성률 검사"), ("/thesis-ai-rate/", "논문 AI 작성률"), ("/resume-ai-rate/", "자기소개서 AI 작성률"),
-             ("/ai-plagiarism-rate/", "AI 표절률 낮추기"), ("/ai-detection-bypass/", "AI 탐지 우회")]
+             ("/ai-plagiarism-rate/", "AI 표절률 낮추기"), ("/ai-detection-bypass/", "AI 탐지 우회"), ("/turnitin-ai/", "턴잇인 AI 검사 대비"), ("/gptzero/", "GPTZero 한국어")]
 
 
 def footer(home=False):

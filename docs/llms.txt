@@ -39,6 +39,8 @@
 - [레포트 AI 작성률 낮추기 · 대학 과제 AI 검사 전 점검](https://aihuman.ai.kr/report-ai-rate/): 대학 레포트와 과제에서 AI 작성률이 높게 나오는 곳, 강의의 AI 사용 규정 확인, 제출 전 점검 순서와 휴머나이징 비용을 정리했습니다.
 - [블로그 AI 티 줄이기 · 블로그 AI 작성률 낮추는 법](https://aihuman.ai.kr/blog-ai-rate/): 챗GPT로 초안을 만든 블로그 글에서 AI 티가 나는 곳, 고치는 순서, 휴머나이징으로 AI 작성률을 낮춘 자체 엔진 측정 사례를 정리했습니다.
 - [AI 작성률 낮추는 프롬프트 · 휴머나이징 프롬프트 예시와 한계](https://aihuman.ai.kr/ai-rate-prompt/): AI를 사용해 초안을 만들 때 문체를 자연스럽게 다듬는 프롬프트 예시와, 프롬프트만으로 AI 작성률이 다 내려가지 않는 까닭, 그다음 할 일을 정리했습니다.
+- [턴잇인 AI 검사 대비 · 턴잇인 AI 감지 · Turnitin AI 작성률 낮추기](https://aihuman.ai.kr/turnitin-ai/): 턴잇인(Turnitin) AI 검사를 앞두고 있다면. 턴잇인 AI 감지가 보여 주는 것, 유사도 검사와의 차이, 한국어 글을 제출 전에 점검하고 걸릴 만한 문장을 다듬는 순서를 정리했습니다.
+- [GPTZero 한국어 · GPTZero 정확도 · 한국어 AI 탐지 대안](https://aihuman.ai.kr/gptzero/): GPTZero로 한국어 글을 검사했다면. GPTZero가 보는 지표(퍼플렉서티 · 버스트니스)와 한국어 글에서 결과가 흔들리는 까닭, 한국어 전용 검사로 다시 확인하고 다듬는 방법을 정리했습니다.
 - [AI 작성률 저감 기술 · 휴머나이징 엔진 원리](https://aihuman.ai.kr/technology/): AIHuman의 AI 작성률 저감 기술. 문장마다 AI 패턴을 판별하고, 원문의 의미를 지키면서 그 패턴만 선별적으로 제거한 뒤 같은 기준으로 다시 측정하는 4단계 원리와 자체 엔진 측정 사례를 정리했습니다.
 - [회사 소개 · 엔진](https://aihuman.ai.kr/about/): AIHuman(AI휴먼)은 한국어 문장을 아는 AI 휴머나이징 전문 서비스입니다. 판별 엔진, 인간화 엔진, 보존 시험 결과와 운영사 정보를 안내합니다.
 - [이용약관](https://aihuman.ai.kr/terms/): AIHuman(AI휴먼) 서비스 이용약관(토큰 · 환불 · 책임의 제한).
