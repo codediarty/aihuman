@@ -28,14 +28,28 @@ import new_pages as NP  # noqa: E402
 P.GUIDES.extend(NP.GUIDES_NEW)   # 2026.11.24 새 가이드 네 편(검색어 주소 맨 위)
 import kw1125 as KW  # noqa: E402
 P.GUIDES.extend(KW.GUIDES)   # 2026.11.25 대표 '기존 쪽과 겹치지 않으면서 노출될 만한 키워드'(턴잇인 AI 검사 · GPTZero 한국어)
+import kw1126 as KW2  # noqa: E402
+P.GUIDES.extend(KW2.GUIDES)   # 2026.11.26 대표 '겹치지 않는 키워드 더' · '에이아이휴먼 한글로 쳐도'(ZeroGPT · 퀼봇 · 챗GPT 휴머나이저)
+for _g in P.GUIDES:   # 기존 쪽에 검색어 더하기(지운 말 없음)
+    _p = KW2.PATCH_G.get(_g["slug"])
+    if _p:
+        for _k in ("kw", "h1", "title", "desc", "answer", "mod"):
+            if _k in _p:
+                _g[_k] = _p[_k]
+        _g["body"] = _g["body"] + _p.get("body_add", "")
+        _g["faq"] = list(_g.get("faq") or []) + _p.get("faq_add", [])
+for _L in P.LANDING:
+    _p = KW2.PATCH_L.get(_L["path"])
+    if _p and _p.get("keywords_add"):
+        _L["keywords"] = _L["keywords"] + ", " + _p["keywords_add"]
 
 # ---------------- 설정 ----------------
 SITE = "https://aihuman.ai.kr"
 HOST = "aihuman.ai.kr"
 BRAND = "AIHuman"
 BRAND_KO = "AI휴먼"
-VER = "20261126b"
-TODAY = "2026-11-24"
+VER = "20261126c"
+TODAY = "2026-11-26"
 # AIHuman 배포(AIMarker 서버 프로젝트 버전 39, 엔진은 AIMarker 와 같음 · 2026.11.22 12:48)
 API = "https://script.google.com/macros/s/AKfycby_nRD2dpVLYztnfUlaiQfS3zOXZwfBMVewmZgecSqnONA3vVmiiIyQuZ32Ae5hcOntyg/exec"
 SHOP = "https://skkc.co.kr/shop_view?idx=%s&kaiec_buy=1"
@@ -77,8 +91,8 @@ def shop(pid):
 
 
 # 로고: 대표가 준 그림(A 리본 표지 + AIHuman, 2026.11.22) 그대로. 어두운 바닥글은 글자만 흰색 판(logo-w.png)
-LOGO = '<a class="logo" href="/" aria-label="%s(%s) 홈"><img src="/assets/img/logo.png?v=%s" width="542" height="120" alt="%s"></a>' % (BRAND, BRAND_KO, VER, BRAND)
-LOGO_W = '<a class="logo" href="/" aria-label="%s(%s) 홈"><img src="/assets/img/logo-w.png?v=%s" width="542" height="120" alt="%s"></a>' % (BRAND, BRAND_KO, VER, BRAND)
+LOGO = '<a class="logo" href="/" aria-label="%s(%s · 에이아이휴먼) 홈"><img src="/assets/img/logo.png?v=%s" width="542" height="120" alt="%s"></a>' % (BRAND, BRAND_KO, VER, BRAND)
+LOGO_W = '<a class="logo" href="/" aria-label="%s(%s · 에이아이휴먼) 홈"><img src="/assets/img/logo-w.png?v=%s" width="542" height="120" alt="%s"></a>' % (BRAND, BRAND_KO, VER, BRAND)
 
 # 메뉴: 형제 사이트에서 대표가 정한 대로 'AI 휴머나이저(AI 작성률 낮추기)' 하나가 첫 칸(헷갈리지 않고 결제로). 검사기 이름은 메뉴에 쓰지 않음
 NAV_OLD = [("", "AI 작성률 낮추기"), ("pricing/", "요금"), ("guide/", "가이드"), ("faq/", "자주 묻는 질문")]   # 2026.11.23 21:42 대표(한국휴머나이저 · 카피휴먼과 같게): 'AI 휴머나이저(AI 작성률 낮추기)' → 'AI 작성률 낮추기'
@@ -136,6 +150,7 @@ def guide_at(new):
 FT_KW = [("/", "AI 휴머나이징"), ("/ai-humanizer/", "AI 휴머나이저"), ("/ai-rate-lower/", "AI 작성률 낮추기"), ("/ai-text-humanize/", "AI 글 인간화"),
          ("/korean-humanizer/", "한국어 휴머나이저"), ("/ai-sentence-converter/", "AI 문장 변환기"), ("/ai-detector/", "AI 탐지기"), ("/ai-humanizing/", "AI 휴머나이징이란"), ("/pricing/", "AI 휴머나이징 가격"),
          ("/technology/", "AI 작성률 저감 기술"), ("/ai-rate-meaning/", "AI 작성률이란"), ("/report-ai-rate/", "레포트 AI 작성률"), ("/blog-ai-rate/", "블로그 AI 티 줄이기"), ("/ai-rate-prompt/", "AI 작성률 낮추는 프롬프트")]   # 2026.11.24 새 쪽
+FT_KW += [("/ai-humanizing-free/", "무료 휴머나이징")]   # 2026.11.26 대표 '무료 휴머나이징을 AIHuman이 맡게'
 
 
 # 11.22 대표 '카피킬러 AI 작성률 낮추기 같은 검색어도 하단에 적혀 노출되게': 첫 화면 밖 쪽에는 검사기 이름 검색어 칩을 더함(첫 화면은 일반 말)
@@ -144,7 +159,7 @@ FT_KW_HOME = [("/copykiller-ai-rate/", "표절 검사 AI 작성률 낮추기"), 
               ("/ai-plagiarism-rate/", "AI 표절률 낮추기"), ("/ai-detection-bypass/", "AI 탐지 우회")]
 FT_KW_SUB = [("/copykiller-ai-rate/", "카피킬러 AI 작성률 낮추기"), ("/gptkiller-ai-rate/", "GPT킬러 낮추기"), ("/chatgpt-ai-rate/", "챗GPT 작성률 낮추기"),
              ("/ai-rate-check/", "AI 작성률 검사"), ("/thesis-ai-rate/", "논문 AI 작성률"), ("/resume-ai-rate/", "자기소개서 AI 작성률"),
-             ("/ai-plagiarism-rate/", "AI 표절률 낮추기"), ("/ai-detection-bypass/", "AI 탐지 우회"), ("/turnitin-ai/", "턴잇인 AI 검사 대비"), ("/gptzero/", "GPTZero 한국어")]
+             ("/ai-plagiarism-rate/", "AI 표절률 낮추기"), ("/ai-detection-bypass/", "AI 탐지 우회"), ("/turnitin-ai/", "턴잇인 AI 검사 대비"), ("/gptzero/", "GPTZero 한국어")] + KW2.FT_ADD   # 11.26 ZeroGPT · 퀼봇 · 챗GPT 휴머나이저(첫 화면 밖)
 
 
 def footer(home=False):
@@ -156,7 +171,7 @@ def footer(home=False):
     ]
     c = "".join('<div><h4>%s</h4><ul>%s</ul></div>' % (h, "".join('<li><a href="%s">%s</a></li>' % (u, t) for u, t in L)) for h, L in cols)
     kw = "".join('<a href="%s"><span>%s</span></a>' % (u, t) for u, t in FT_KW + (FT_KW_HOME if home else FT_KW_SUB))
-    return ('<footer class="ft"><div class="wrap"><div class="ft-top"><div>%s<p>AI휴먼 | AI 휴머나이징 전문 서비스.<br>AI 작성률을 무료로 검사하고, 걸리는 문장만 사람 문장으로 바꿉니다.</p><div class="ft-kw">%s</div></div>%s</div>'
+    return ('<footer class="ft"><div class="wrap"><div class="ft-top"><div>%s<p>AI휴먼(에이아이휴먼) | AI 휴머나이징 전문 서비스.<br>AI 작성률을 무료로 검사하고, 걸리는 문장만 사람 문장으로 바꿉니다.</p><div class="ft-kw">%s</div></div>%s</div>'
             '<div class="ft-biz"><b>운영</b> %s · 대표 %s · 사업자등록번호 %s · 통신판매업 신고 %s<br>%s · %s<br>'
             '다른 AI 탐지 서비스의 이름은 각 권리자의 상표이며, %s은 해당 서비스와 제휴 관계가 없습니다. AI 작성률과 판정은 %s 판정 기준으로 계산한 값입니다.<br>© 2026 %s(%s). All rights reserved.</div></div></footer>'
             '<div class="mcta" id="mcta"><a class="btn btn-p" href="/#tool" data-tool>%s무료 검사</a><a class="btn btn-g" href="/pricing/">요금 보기</a></div>') % (
@@ -164,7 +179,7 @@ def footer(home=False):
 
 
 # ---------------- 구조화 데이터 ----------------
-ALT = [BRAND_KO, "에이아이휴먼", "AI Human", "AIHuman AI 휴머나이저", HOST]
+ALT = [BRAND_KO, "에이아이휴먼", "AI Human", "AIHuman AI 휴머나이저", HOST, "에이아이 휴먼", "AIHuman 휴머나이저", "에이아이휴먼 휴머나이저"]   # 11.26 한글 이름 · 가상 인간과 구분
 ORG = {"@type": "Organization", "@id": SITE + "/#org", "name": BRAND, "alternateName": ALT, "url": SITE + "/",
        "logo": {"@type": "ImageObject", "url": SITE + "/assets/img/logo-512.png", "width": 512, "height": 512},
        "slogan": "AI휴먼 | AI 휴머나이징 전문 서비스",
@@ -203,7 +218,20 @@ def ld_offers():
 PAGES = []   # (path, title, desc, lastmod, priority)
 
 
+SITE_NAME = BRAND + " 휴머나이저"   # 11.26 대표 '제목에도 AIHuman 휴머나이저처럼 붙여서 가상 인간 결과와 구분'
+
+
+def brand_title(t):
+    """제목 끝 브랜드에 '휴머나이저'를 더함(앞말은 그대로): | AIHuman(AI휴먼) → | AIHuman 휴머나이저(AI휴먼), | AIHuman → | AIHuman 휴머나이저"""
+    if t.endswith(" | %s(%s)" % (BRAND, BRAND_KO)):
+        return t[: -len(" | %s(%s)" % (BRAND, BRAND_KO))] + " | %s(%s)" % (SITE_NAME, BRAND_KO)
+    if t.endswith(" | " + BRAND):
+        return t + " 휴머나이저"
+    return t
+
+
 def page(path, title, desc, body, *, ld=None, tool=False, og=None, ptype="website", noindex=False, priority="0.7", lastmod=TODAY, extra_head="", keywords=""):
+    title = brand_title(title)
     url = SITE + "/" + path
     ogimg = og or (SITE + "/assets/img/og.png?v=" + VER)
     graph = [ORG, WEBSITE] + (ld or [])
@@ -213,7 +241,7 @@ def page(path, title, desc, body, *, ld=None, tool=False, og=None, ptype="websit
             '<link rel="canonical" href="%s">' % url,
             '<link rel="alternate" hreflang="ko" href="%s"><link rel="alternate" hreflang="x-default" href="%s">' % (url, url),
             '<meta name="robots" content="%s">' % ("noindex,follow" if noindex else "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"),
-            '<meta property="og:type" content="%s"><meta property="og:site_name" content="%s(%s)"><meta property="og:locale" content="ko_KR">' % (ptype, BRAND, BRAND_KO),
+            '<meta property="og:type" content="%s"><meta property="og:site_name" content="%s(%s)"><meta property="og:locale" content="ko_KR">' % (ptype, SITE_NAME, BRAND_KO),
             '<meta property="og:title" content="%s"><meta property="og:description" content="%s"><meta property="og:url" content="%s">' % (esc(title), esc(desc), url),
             '<meta property="og:image" content="%s"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="%s">' % (ogimg, esc(BRAND + " · AI 작성률 검사와 AI 휴머나이징")),
             '<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="%s"><meta name="twitter:description" content="%s"><meta name="twitter:image" content="%s">' % (esc(title), esc(desc), ogimg),
@@ -598,11 +626,11 @@ def build_guides():
                 '<div class="gcta"><h2>내 글의 AI 작성률, 지금 바로 확인하세요</h2><p>가입 없이 무료 · 문장마다 AI 검출 여부를 보여 드립니다.</p><a class="btn btn-p btn-l" href="/#tool">%s무료로 AI 작성률 검사</a></div>'
                 '</div></section></article><section class="sec-s alt"><div class="wrap"><h2 class="h2">함께 읽으면 좋은 글</h2><div class="gcards">%s</div></div></section>') % (
             crumbs_html(trail), esc(g["cat"] + " · " + g["kw"]), esc(g["h1"]), BRAND, g["date"].replace("-", "."), max(2, len(re.sub(r"<[^>]+>", "", g["body"])) // 650), g["answer"], toc_html, g["body"], faq, ico("search"), rel)
-        art = {"@type": "Article", "headline": g["h1"], "description": g["desc"], "inLanguage": "ko-KR", "datePublished": g["date"], "dateModified": g["date"], "keywords": g["kw"].replace(" · ", ", "),
+        art = {"@type": "Article", "headline": g["h1"], "description": g["desc"], "inLanguage": "ko-KR", "datePublished": g["date"], "dateModified": g.get("mod", g["date"]), "keywords": g["kw"].replace(" · ", ", "),
                "author": {"@type": "Organization", "name": BRAND + " 편집팀", "url": SITE + "/about/"}, "publisher": {"@id": SITE + "/#org"},
                "mainEntityOfPage": SITE + "/" + gpath(g), "image": [SITE + "/assets/img/og.png"], "articleSection": g["cat"]}
         ld = [art, ld_crumbs(trail)] + ([ld_faq(g["faq"])] if g.get("faq") else [])
-        page(gpath(g), g["title"], g["desc"], body, ld=ld, ptype="article", priority="0.7", lastmod=g["date"],
+        page(gpath(g), g["title"], g["desc"], body, ld=ld, ptype="article", priority="0.7", lastmod=g.get("mod", g["date"]),
              extra_head='<meta property="article:published_time" content="%sT09:00:00+09:00">' % g["date"], keywords=g["kw"].replace(" · ", ", "))
 
 
