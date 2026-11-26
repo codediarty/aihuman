@@ -752,3 +752,30 @@ html.hz42-on,html.hz42-on body{overflow:hidden}
   html.am-tok-on .hd-r > .am-tok svg { width: 10px; height: 10px; }
   html.am-tok-on .hd-r > .am-tok b { font-size: 11px; }
 }
+
+/* 13.44(2026.11.26 밤) 대표 'AIHuman 은 왜 들어와서 검사조차 안 하나': 휴대폰 · 태블릿 첫 화면에 글 칸 · 파일 올리기가 하나도 보이지 않던 것
+   (1080px 아래에서 첫 입력 칸이 760~1190px, 휴대폰 화면 높이 아래). PC 첫 화면의 '파일 업로드 · 텍스트 입력' 상자를 1080px 아래에서도 보이게 하고
+   휴대폰은 제목 바로 아래로 올림. 지운 것은 없음(순서와 크기만) */
+@media (max-width:1080px){
+  .hero-copy>.hero-up{display:block;max-width:560px}
+}
+@media (max-width:760px){
+  .hero-copy{display:flex;flex-direction:column}
+  .hero-copy>.eb-row{order:1}
+  .hero-copy>.h1{order:2}
+  .hero-copy>.hero-up{order:3;max-width:none;margin:0 0 18px;padding:14px 14px 13px;border-radius:18px}
+  .hero-copy>.lead{order:4;margin-bottom:18px}
+  .hero-copy>.hero-pts{order:5}
+  .hero-copy>.hero-proof{order:6}
+  .hero-up .hu-h{gap:12px}
+  .hero-up .hu-ic{width:38px;height:38px;border-radius:12px}
+  .hero-up .hu-ic .ico{width:19px;height:19px}
+  .hero-up .hu-h b{font-size:15px}
+  .hero-up .hu-h span{font-size:12.5px;line-height:1.5}
+  .hero-up .hu-b{margin-top:12px}
+  .hero-up .hu-b .btn{padding:12px 10px;font-size:14.5px;min-height:46px}
+}
+@media (max-width:360px){
+  .hero-up .hu-h span{display:none}
+  .hero-up .hu-b .btn{font-size:14px;padding:11px 8px}
+}
